@@ -1,0 +1,661 @@
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+   <link href="/temp/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+   <link href="/temp/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/temp/css/sb-admin-2.css">
+    <link rel="stylesheet" href="/temp/css/style.css">
+    <link rel="stylesheet" href="/temp/css/all.min.css">
+    <link rel="stylesheet" href="/temp/css/course.css">
+
+    <title>Admin</title>
+  </head>
+  <body class="h-100" id="wrapper">
+    <% if (course !== undefined){ %>
+    <div id="content-wrapper">
+      <div class="d-flex bg-white" >
+        <%- include('top-sidebar'); -%>
+        <div class="left-side">
+            <form id="editCourses">
+                <input type="text" name="uid" value="<%=course.id%>" hidden required>
+                <div class="input-group">
+                  <label class="w-100">Title</label>
+                  <input type="text" class="usual-input" placeholder="Input Title of video" id="title" name="title" required value="<%=course.title%>" >
+                </div>
+                <div class="input-group">
+                  <label class="w-100" >URL</label>
+                  <input type="text" class="usual-input" placeholder="Generated URL" id="url" name="url" required value="<%=course.url%>">
+                </div>
+                <div class="input-group">
+                  <label class="w-100">Front text</label>
+                  <input type="text" class="usual-input" placeholder="Input Title of video" name="front_text" required value="<%=course.front_text%>">
+                </div>
+                <div class="input-group">
+                  <label class="w-100" >Description</label>
+                  <textarea type="text" class="usual-input" placeholder="Input description of video"  rows="4" name="description" required><%=course.description%></textarea>
+                </div>
+                <div class="input-group">
+                  <label class="w-100" >Categories</label>
+                  <select class="usual-input" name="f_category" id="f_category_id">
+                    <% category.forEach(function(filter){%>
+                      <option 
+                        value="<%= filter.id %>" 
+                        <%if(course.f_category===filter.id){%>disabled<%}%> 
+                        <%if(course.f_category===filter.id){%>selected<%}%> 
+                      >
+                        <%= filter.title %>
+                      </option>
+                    <% }); %>
+                  </select>
+                </div>  
+                
+                <div class="input-group">
+                  <label class="w-100">Topic</label>
+                  <div class="selected_item_contnet">
+                    <% theme.forEach(function(filter,index){%>
+                      <%if(course.f_theme.includes(filter.id.toString())){%>
+                            <div class="selected_items">
+                              <%= filter.title %>
+                              <button onclick="DeleteFtheme('<%= course.id%>','<%= filter.id%>')" class="dilete_fteme">x</button>
+                            </div>
+                        
+                        
+                        <%}%> 
+                      
+                      
+                    <% }); %>
+                  </div>
+                  <select class="usual-input" name="f_theme[]" multiple id="f_theme_id">
+                    <% theme.forEach(function(filter,index){%>
+                      <%if(!course.f_theme.includes(filter.id.toString())){%>
+                        <option 
+                         class="f_them"
+                         value="<%= filter.id %>" 
+                         label="<%=filter.category_id%>"
+                         
+                         
+                      >
+                        <%= filter.title %>
+                      </option>
+                    
+                    
+                    <%}%> 
+                      
+                    <% }); %>
+                  </select>
+                </div>
+                
+                <div class="input-group">
+                  <label class="w-100">Author</label>
+
+                  <select class="usual-input" name="f_profesor">
+                    <% profs.forEach(function(filter){%>
+                      <option 
+                         
+                        value="<%=filter.id%>"
+                        <%if(course.f_profesor===filter.id){%>disabled<%}%>
+                        <%if(course.f_profesor===filter.id){%>selected<%}%>
+                        label="<%=filter.category_id%>"
+                      >
+                        <%=filter.title%>
+                      </option>
+                    <% }); %>
+                  </select>
+                </div>
+                
+                <div class="input-group">
+                  <label class="w-100" >Duration of Course</label>
+                  <input type="text" class="usual-input short" placeholder="Input Duration" name="duration" value="<%=course.duration%>"/>
+                </div>
+
+                <div class="input-group">
+                  <label class="w-100">This Course for:</label>
+
+                  <div class="radiobox-group">
+                    <input type="checkbox" id="r1" name="for_doctors" value="1" <%if(course.for_doctor==1){%>checked<%}%> hidden/>
+                    <label for="r1"><img src="/temp/image/icon/for_doctors.png">  For senior <br/> med. worker</label>
+                    
+                    <input type="checkbox" id="r2" name="for_medical" value="1" <%if(course.for_medical==1){%>checked<%}%> hidden/>
+                    <label for="r2"><img src="/temp/image/icon/for_medical.png"> For mid-level <br/> med. worker</label>
+                    
+                    <input type="checkbox" id="r3" name="for_student" value="1" <%if(course.for_student==1){%>checked<%}%> hidden/>
+                    <label for="r3"><img src="/temp/image/icon/for_student.png">For students</label>
+
+                    <input type="checkbox" id="r4" name="for_pharmacist" value="1" <%if(course.for_pharmacist==1){%>checked<%}%> hidden/>
+                    <label for="r4"><img src="/temp/image/icon/for_student.png">For pharmacist</label>
+
+                    <input type="checkbox" id="r5" name="for_dispenser" value="1" <%if(course.for_dispenser==1){%>checked<%}%> hidden/>
+                    <label for="r5"><img src="/temp/image/icon/for_student.png">For dispenser</label>
+                  </div>
+                </div>
+
+                <div class="multiinput-group">
+                  <div class="input-group">
+                    <label class="w-100" >Set the Price</label>
+                    <input type="number" min="0" class="usual-input" placeholder="Input Price For Doctor" name="price_doctor" value="<%=course.price_doctor%>"/>
+                  </div>
+                
+                  <div class="input-group">
+                    <label class="w-100" ></label>
+                    <input
+                      type="number" 
+                      min="0" 
+                      class="usual-input" 
+                      placeholder="Input Price For Medical" 
+                      name="price_medical" 
+                      value="<%= course.price_medical %>"
+                    />
+                  </div>
+                
+                  <div class="input-group">
+                    <label class="w-100" ></label>
+                    <input type="number" min="0" class="usual-input" 
+                    placeholder="Input Price Students" name="price_student" 
+                    value="<%= course.price_student %>"/>
+                  </div>
+
+                  <div class="input-group">
+                    <label class="w-100" ></label>
+                    <input type="number" min="0" class="usual-input" 
+                    placeholder="Input Price Pharmacist" name="price_pharmacist" 
+                    value="<%= course.price_pharmacist %>"/>
+                  </div>
+
+                  <div class="input-group">
+                    <label class="w-100" ></label>
+                    <input type="number" min="0" class="usual-input" 
+                    placeholder="Input Price Dispenser" name="price_dispenser" 
+                    value="<%= course.price_dispenser %>"/>
+                  </div>
+                </div>
+                
+                <div class="multiinput-group">
+                    <div class="input-group">
+                      <label class="w-100">Set the Promo Code</label>
+                      <input type="text" class="usual-input" placeholder="Input Promo Code" name="promo_code" value="<%=course.promo_code%>"/>
+                    </div>
+                    <div class="input-group">
+                      <label class="w-100">Set Special price</label>
+                      <input type="number" min="0" class="usual-input" placeholder="Input Special Price" name="special_price" value="<%=course.special_price%>"/>
+                    </div>
+                    <div class="input-group">
+                      <label class="w-100">Or Set the Sale %</label>
+                      <input type="text" class="usual-input" placeholder="Input Sale Percent" name="sale" value="<%=course.sale%>"/>
+                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-4 d-flex ">
+                    
+                    <input type="checkbox" <%if(course.show_quiz){%>checked<%}%> name="showquiz" id="showquiz" value="true">
+                    <label for="showquiz" class="show_quiz">Show quiz</label>
+                  </div>
+                </div>
+                <!-- Start quiz section -->
+                <div class="row">
+                  <div class="col-lg-2">
+                    <div class="input-group">
+                      <label class="w-100">
+                        <% if(steps.find(item => item['step'] === 1)){ %>
+                          Edit Quiz 1
+                        <% } else{ %>
+                          Create Quiz 1
+                        <% } %>
+                      </label>
+                      <% if(status !== 3){ %>
+                        <button type="button" class="crt_quiz" onclick="quizPopUp(1)">
+                          <% if(steps.find(item => item['step'] === 1)){ %>
+                            Edit Quiz
+                          <% } else{ %>
+                            Create Quiz
+                          <% } %>
+                        </button>
+                      <% } else{ %>
+                        <button type="button" class="crt_quiz">
+                          <% if(steps.find(item => item['step'] === 1)){ %>
+                            Edit Quiz
+                          <% } else{ %>
+                            Create Quiz
+                          <% } %>
+                        </button>
+                      <% } %>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-2">
+                    <div class="input-group">
+                      <label class="w-100">
+                        <% if(steps.find(item => item['step'] === 2)){ %>
+                          Edit Quiz 2
+                        <% } else{ %>
+                          Create Quiz 2
+                        <% } %>
+                      </label>
+                      <% if(status !== 3){ %>
+                        <button type="button" class="crt_quiz" onclick="quizPopUp(2)">
+                        <% if(steps.find(item => item['step'] === 2)){ %>
+                          Edit Quiz
+                        <% } else{ %>
+                          Create Quiz
+                        <% } %>
+                        </button>
+                      <% } else{ %>
+                        <button type="button" class="crt_quiz">
+                          <% if(steps.find(item => item['step'] === 2)){ %>
+                            Edit Quiz
+                          <% } else{ %>
+                            Create Quiz
+                          <% } %>
+                        </button>
+                      <% } %>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-2">
+                    <div class="input-group">
+                      <label class="w-100">
+                        <% if(steps.find(item => item['step'] === 3)){ %>
+                          Edit Quiz 3
+                        <% } else{ %>
+                          Create Quiz 3
+                        <% } %>
+                      </label>
+
+                      <% if(status !== 3){ %>
+                        <button type="button" class="crt_quiz" onclick="quizPopUp(3)">
+                          <% if(steps.find(item => item['step'] === 3)){ %>
+                            Edit Quiz
+                          <% } else{ %>
+                            Create Quiz
+                          <% } %>
+                        </button>
+                      <% } else{ %>
+                        <button type="button" class="crt_quiz">
+                          <% if(steps.find(item => item['step'] === 3)){ %>
+                            Edit Quiz
+                          <% } else{ %>
+                            Create Quiz
+                          <% } %>
+                        </button>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+                <!-- End quiz section -->
+                
+                <div class="input-group">
+                  <label class="w-100" >Amount of Credits</label>
+                  <input type="text" class="usual-input short" placeholder="Set amount of Credits" name="credits" value="<%=course.credits%>"/>
+                </div>
+                <div class="d-flex align-items-start">
+                  <div class="input-group">
+                    <label class="w-100" >Main Photo</label>
+
+                    <div class="filebox-group">
+
+                      <input type="file" id="fi" name="front_image" accept="image/*" <%if(course.front_image==1){%>required<%}%>/>
+                      
+                      <label for="fi" class="w-75"><img src="/temp/image/icon//PlusCircle.png">Upload Image (.png,.jpeg,jpg,svg,.icon)</label>
+                    </div>
+
+                    <%if(course.front_image!==""){%>
+                      <div style="width:50%;height:auto;">
+                          <img src="/public/uploads/courses/<%=course.id%>/<%=course.front_image%>" class="w-100 h-auto">
+                      </div>
+                    <%}%>
+                  </div>
+                  <div class="input-group">
+                    <!-- pdf -->
+                    <label class="w-100" >Pdf</label>
+
+                    <div class="filebox-group">
+
+                      <input type="file" id="fil" name="front_pdf" accept=".pdf" />
+                      
+                      <label for="fil" class="w-75"><img src="/temp/image/icon//PlusCircle.png">Upload Pdf (.Pdf)</label>
+                    </div>
+
+                    <%if(course.front_pdf!==""){%>
+                      <div style="width:50%;height:auto;">
+                          <a href="/public/uploads/courses/<%=course.id%>/<%=course.front_pdf%>" class="w-100 h-auto">view Pdf file </a>
+                      </div>
+                      <img 
+                          class="deletepdf"
+                          onclick="DeletePdf('<%= course.id%>')"
+                          src="/temp/image/icon/MinusCircle.png"
+                              />
+                     
+                      <%}%>
+                  </div>
+                  <div class="input-group">
+                    <label class="w-100" >Preview</label>
+                    <div class="input-group">
+                      <input type="text" class="usual-input w-50" name="tizer_video"  value="<%=course.tizer_video%>" required>
+                    </div>
+                    <%if(course.tizer_video!==""){%>
+                        <iframe src="<%=course.tizer_video%>" width="100%" height="300" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                    <%}%>
+                  </div>
+                </div>
+                <div class="form_footer">
+                  <div class="d-flex align-items-center">
+                    <% if(status !== 3){ %>
+                      <input type="checkbox" name="public" id="public" <%if(course.public==1){%>checked<%}%> hidden/>
+                      <label for="public" onclick="publicFunc('<%= course.public %>', '<%= course.id %>')">Publish</label>
+                      <button type="submit">Update</button>
+                    <% } else{ %>
+                      <input type="checkbox" name="public" id="public" <%if(course.public==1){%>checked<%}%> hidden/>
+                      <label>Publish</label>
+                      <button type="button">Update</button>
+                    <% } %> 
+                  </div>
+
+                  <small class="text-danger" id="err"></small>   
+                  <small class="text-success" id="success"></small>
+                </div>
+            </form>
+            <hr>
+            <h5 class="w-100 mb-4" >Videos For Courses</h5>
+            <div class="exist_chapters">
+              <% for(let i=0;i<videos.length;i++){%>
+                <div class="chapter_box">
+                    <label>Chapter <%=videos[i].video_part%></label>
+                    <div>
+                        <div class="media_box">
+                          <div>
+                            <img onclick="showCourseVideo(this)"src="/temp/image/icon/play.png"style="width: 20px;height: 20px;">
+                            
+                            <% if(status !== 3){ %>
+                              <img 
+                                onclick="deleteCourseVideo(this,'<%=videos[i].id%>')" 
+                                src="/temp/image/icon/MinusCircle.png"
+                              />
+                            <% } else{ %>
+                              <img src="/temp/image/icon/MinusCircle.png" />
+                            <% } %>
+                          </div>
+
+                          <iframe src="<%=videos[i].vimeo%>" width="100%" height="auto" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                          
+                          <img src="/public/uploads/courses/<%=course.id%>/<%=videos[i].cart_img%>" />
+                        </div>
+                        <div class="text_box">
+                          <%=videos[i].title%>
+                        </div>
+                    </div>
+                </div>
+              <%}%>
+            </div>
+            <form id="addVideo">
+              <input type="text" name="id" id="course_id" value="<%=course.id%>" hidden required>
+              <div class="form-group">
+                  <div class="file_text_group mt-4">
+                    <div class="input-group">
+                      <label class="w-100" >Photo</label>
+                      <div class="filebox-group">
+                        <input type="file" id="vi" name="video_image" accept=".png,.jpeg,jpg,svg,.icon" required/>
+                        <label for="vi"><img src="/temp/image/icon/PlusCircle.png">Upload Image</label>
+                      </div>
+                    </div>
+                    <div class="input-group ml-4">
+                        <label>Title</label>
+                        <input type="text" class="usual-input" id="titleV" name="title" required>
+                    </div>
+                    <div class="input-group  ml-4">
+                        <label>URL</label>
+                        <input type="text"  class="usual-input" id="urlV" name="url" required>
+                    </div>
+                  </div>
+                  <div class="file_text_group">
+                    <!-- <div class="input-group">
+                      <label class="w-100" >Video 123</label>
+                      <div class="filebox-group">
+                        <input type="file" id="vv" name="video_video" accept=".mp4" disabled/>
+                        <label for="vv"><img src="/temp/image/icon/PlusCircle.png">Upload Video</label>
+                      </div>
+                    </div> -->
+                    <div class="input-group">
+                      <label>Vimeo</label>
+                      <input type="text" class="usual-input" name="vimeo">
+                    </div>
+                    <div class="input-group  ml-4">
+                      <label>Part</label>
+                      <input type="text" class="usual-input" name="part" required>
+                    </div>
+                  </div>
+                  <div class="form_footer">
+                    <% if(status !== 3){ %>
+                      <button type="submit">Add</button>
+                    <% } else{ %>
+                      <button type="button">Add</button>
+                    <% } %>
+                    
+                    <small class="text-danger" id="errV"></small>
+                  </div>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="crt_quiz_popup">
+    <div> 
+        <div id="quiz_header" onclick="quizPopUp(1)">
+          <i class="fas fa-arrow-left"></i>
+          back to /parent page/
+        </div>
+
+        <div class="main_data">
+          <div class="input-group mb-3">
+            <label>Title</label>
+            <input type="text" class="usual-input quiz_title" placeholder="Input Title">
+          </div>
+
+          <div class="input-group mb-3">
+            <label>Description</label>
+            <textarea type="text" class="usual-input quiz_desc" 
+            placeholder="Input description"></textarea>
+          </div>
+        </div>
+
+        <div class="question_data">
+          <div class="input-group mb-3">
+            <label>Question <span class="qsBox"></span></label>
+            <textarea type="text" class="usual-input quiz_question" placeholder="Input question*"></textarea>
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer1" placeholder="Input answer 1*">
+            <input type="radio" value="1" class="questionCheck" name="questionCheck1" />
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer2" placeholder="Input answer 2*">
+            <input type="radio" value="2" class="questionCheck" name="questionCheck1" />
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer3" placeholder="Input answer 3*">
+            <input type="radio" value="3" class="questionCheck" name="questionCheck1" />
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer4" placeholder="Input answer 4*">
+            <input type="radio" value="4" class="questionCheck" name="questionCheck1" />
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer5" placeholder="Input answer 5*">
+            <input type="radio" value="5" class="questionCheck" name="questionCheck1" />
+          </div>
+        </div>
+        <div class="add-btn-single-contanier justify-content-end">
+          <button class="crt_quiz" onclick="quizPrev(1)">Previous</button>
+          <button class="btn-my-prm ml-3" onclick="quizNext(1)">Next</button>
+
+          <% if(status !== 3){ %>
+            <button class="btn-my-prm ml-3" onclick="quizSave(1)">Save</button>
+          <% } else{ %>
+            <button class="btn-my-prm ml-3">Save</button>
+          <% } %>
+          
+        </div>
+        <small class="w-100 text-danger d-flex justify-content-end quiz_err"></small>
+    </div>
+  </div>
+
+  <div class="crt_quiz_popup">
+    <div> 
+        <div id="quiz_header" onclick="quizPopUp(2)">
+          <i class="fas fa-arrow-left"></i>
+          back to /parent page/
+        </div>
+
+        <div class="main_data">
+          <div class="input-group mb-3">
+            <label>Title</label>
+            <input type="text" class="usual-input quiz_title" placeholder="Input Title">
+          </div>
+
+          <div class="input-group mb-3">
+            <label>Description</label>
+            <textarea type="text" class="usual-input quiz_desc"
+            placeholder="Input description"></textarea>
+          </div>
+        </div>
+
+        <div class="question_data">
+          <div class="input-group mb-3">
+            <label>Question <span class="qsBox"></span></label>
+            <textarea type="text" class="usual-input quiz_question" placeholder="Input question*"></textarea>
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer1" placeholder="Input answer 1*">
+            <input type="radio" value="1" class="questionCheck" name="questionCheck2" />
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer2" placeholder="Input answer 2*">
+            <input type="radio" value="2" class="questionCheck" name="questionCheck2" />
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer3" placeholder="Input answer 3*">
+            <input type="radio" value="3" class="questionCheck" name="questionCheck2" />
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer4" placeholder="Input answer 4*">
+            <input type="radio" value="4" class="questionCheck" name="questionCheck2" />
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer5" placeholder="Input answer 5*">
+            <input type="radio" value="5" class="questionCheck" name="questionCheck2" />
+          </div>
+        </div>
+        <div class="add-btn-single-contanier justify-content-end">
+          <button class="crt_quiz" onclick="quizPrev(2)">Previous</button>
+          <button class="btn-my-prm ml-3" onclick="quizNext(2)">Next</button>
+
+          <% if(status !== 3){ %>
+            <button class="btn-my-prm ml-3" onclick="quizSave(2)">Save</button>
+          <% } else{ %>
+            <button class="btn-my-prm ml-3">Save</button>
+          <% } %>
+          
+        </div>
+        <small class="w-100 text-danger d-flex justify-content-end quiz_err"></small>
+    </div>
+  </div>
+
+  <div class="crt_quiz_popup">
+    <div> 
+        <div id="quiz_header" onclick="quizPopUp(3)">
+          <i class="fas fa-arrow-left"></i>
+          back to /parent page/
+        </div>
+
+        <div class="main_data">
+          <div class="input-group mb-3">
+            <label>Title</label>
+            <input type="text" class="usual-input quiz_title" placeholder="Input Title">
+          </div>
+
+          <div class="input-group mb-3">
+            <label>Description</label>
+            <textarea type="text" class="usual-input quiz_desc" 
+            placeholder="Input description"></textarea>
+          </div>
+        </div>
+
+        <div class="question_data">
+          <div class="input-group mb-3">
+            <label>Question <span class="qsBox"></span></label>
+            <textarea type="text" class="usual-input quiz_question" placeholder="Input question*"></textarea>
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer1" placeholder="Input answer 1*">
+            <input type="radio" value="1" class="questionCheck" name="questionCheck3" />
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer2" placeholder="Input answer 2*">
+            <input type="radio" value="2" class="questionCheck" name="questionCheck3" />
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer3" placeholder="Input answer 3*">
+            <input type="radio" value="3" class="questionCheck" name="questionCheck3" />
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer4" placeholder="Input answer 4*">
+            <input type="radio" value="4" class="questionCheck" name="questionCheck3" />
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" class="usual-input quiz_answer5" placeholder="Input answer 5*">
+            <input type="radio" value="5" class="questionCheck" name="questionCheck3" />
+          </div>
+        </div>
+        <div class="add-btn-single-contanier justify-content-end">
+          <button class="crt_quiz" onclick="quizPrev(3)">Previous</button>
+          <button class="btn-my-prm ml-3" onclick="quizNext(3)">Next</button>
+
+          <% if(status !== 3){ %>
+            <button class="btn-my-prm ml-3" onclick="quizSave(3)">Save</button>
+          <% } else{ %>
+            <button class="btn-my-prm ml-3">Save</button>
+          <% } %>
+          
+        </div>
+        <small class="w-100 text-danger d-flex justify-content-end quiz_err"></small>
+    </div>
+  </div>
+  
+  <% } %>
+  <script src="/temp/vendor/jquery/jquery.min.js"></script>
+  <script src="/temp/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="/temp/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="/temp/vendor/js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
+  <script src="/temp/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="/temp/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="/temp/vendor/js/demo/datatables-demo.js"></script>
+<script src="/temp/ajax/courses-one.js"></script>
+</body>
+</html>

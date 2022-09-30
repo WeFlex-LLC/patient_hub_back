@@ -1,0 +1,201 @@
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+   <link href="/temp/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+   <link href="/temp/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/temp/css/sb-admin-2.css">
+    <link rel="stylesheet" href="/temp/css/style.css">
+    <link rel="stylesheet" href="/temp/css/all.min.css">
+    <link rel="stylesheet" href="/temp/css/course.css">
+
+    <title>Admin</title>
+  </head>
+  <body class="h-100" id="wrapper">
+    <div id="content-wrapper">
+      <div class="d-flex bg-white" >
+        <%- include('top-sidebar'); -%>
+        <div class="left-side">
+          <form id="addCourses">
+              <div class="input-group">
+                <label class="w-100">Title</label>
+                <input type="text" class="usual-input" placeholder="Input Title of video" id="title" name="title" required>
+              </div>
+              <div class="input-group">
+                <label class="w-100" >URL</label>
+                <input type="text" class="usual-input" placeholder="Generated URL" id="url" name="url" required>
+              </div>
+              <div class="input-group">
+                <label class="w-100">Front text</label>
+                <input type="text" class="usual-input" placeholder="Input Title of video" name="front_text" required>
+              </div>
+              <div class="input-group">
+                <label class="w-100" >Description</label>
+                <textarea type="text" class="usual-input" placeholder="Input description of video"  rows="4" name="description" required></textarea>
+              </div>
+              <div class="input-group">
+                <label class="w-100" >Categories</label>
+                
+                <select class="usual-input" name="f_category" required>
+                  <option value="" disabled selected>Choose category</option>
+                  <% category.forEach(function(filter){%>
+                    <option value="<%= filter.id %>"><%= filter.title %></option>
+                  <% }); %>
+                </select>
+              </div>  
+              <div class="input-group">
+                <label class="w-100" >Topic</label>
+                <select class="usual-input" id="f_theme" name="f_theme[]" multiple disabled required>
+                  <option value="" disabled selected>Choose Topic</option>
+                  <% theme.forEach(function(filter){%>
+                    <option value="<%= filter.id %>" label="<%= filter.category_id %>">
+                      <%= filter.title %>
+                    </option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="input-group">
+                <label class="w-100" >Author</label>
+                <select class="usual-input" name="f_profesor" disabled required>
+                  <option value="" disabled selected>Choose Author</option>
+                  <% profs.forEach(function(filter){%>
+                    <option value="<%=filter.id%>" label="<%=filter.category_id%>"><%=filter.title%></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="input-group">
+                <label class="w-100" >Duration of Course</label>
+                <input type="text" class="usual-input short" placeholder="Input Duration" name="duration" required/>
+              </div>
+              <div class="input-group">
+                <label class="w-100" >This Course for:</label>
+                <div class="radiobox-group">
+                  <input type="checkbox" id="r1" name="for_doctors" value="1" checked hidden />
+                  <label for="r1"><img src="/temp/image/icon/for_doctors.png"> For Doctors</label>
+                  
+                  <input type="checkbox" id="r2" name="for_medical" value="1" hidden />
+                  <label for="r2"><img src="/temp/image/icon/for_medical.png"> For medical worker</label>
+                  
+                  <input type="checkbox" id="r3" name="for_student" value="1" hidden />
+                  <label for="r3"><img src="/temp/image/icon/for_student.png">For students</label>
+
+                  <input type="checkbox" id="r4" name="for_pharmacist" value="1" hidden />
+                  <label for="r4"><img src="/temp/image/icon/for_student.png">For pharmacist</label>
+
+                  <input type="checkbox" id="r5" name="for_dispenser" value="1" hidden />
+                  <label for="r5"><img src="/temp/image/icon/for_student.png">For dispenser</label>
+                </div>
+              </div>
+
+              <div class="multiinput-group">
+                <div class="input-group">
+                  <label class="w-100" >Set the Price</label>
+                  <input type="number" value="0" min="0" class="usual-input" placeholder="Input Price For Doctor" name="price_doctor" required/>
+                </div>
+                
+                <div class="input-group">
+                  <label class="w-100" ></label>
+                  <input type="number" value="0" min="0" class="usual-input" placeholder="Input Price For Medical" name="price_medical" required/>
+                </div>
+
+                <div class="input-group">
+                  <label class="w-100" ></label>
+                  <input type="number" value="0" min="0" class="usual-input" 
+                  placeholder="Input Price Students" name="price_student" required/>
+                </div>
+
+                <div class="input-group">
+                  <label class="w-100" ></label>
+                  <input type="number" value="0" min="0" class="usual-input" 
+                  placeholder="Input Price Pharmacist" name="price_pharmacist" required/>
+                </div>
+
+                <div class="input-group">
+                  <label class="w-100" ></label>
+                  <input 
+                    type="number" 
+                    value="0" 
+                    min="0" 
+                    class="usual-input" 
+                    placeholder="Input Price Dispenser" 
+                    name="price_dispenser" 
+                    required
+                  />
+                </div>
+
+              </div>
+
+              <div class="multiinput-group">
+                  <div class="input-group">
+                    <label class="w-100">Set the Promo Code</label>
+                    <input type="text" class="usual-input" placeholder="Input Promo Code" name="promo_code" />
+                  </div>
+                  <div class="input-group">
+                    <label class="w-100">Set Special price</label>
+                    <input type="number" min="0" value="0" class="usual-input" placeholder="Input Special Price" name="special_price" />
+                  </div>
+                  <div class="input-group">
+                    <label class="w-100">Or Set the Sale %</label>
+                    <input type="text" class="usual-input" placeholder="Input Sale Percent" name="sale" />
+                  </div>
+              </div>
+              <!-- <div class="input-group">
+                <label class="w-100">Create Quiz</label>
+                <button type="button" class="crt_quiz" onclick="createQuiz()">Create Quiz</button>
+              </div> -->
+              <div class="input-group">
+                <label class="w-100" >Amount of Credits</label>
+                <input type="text" class="usual-input short" placeholder="Set amount of Credits" name="credits" required/>
+              </div>
+              <div class="input-group">
+                <label class="w-100" >Main Photo</label>
+                <div class="filebox-group">
+                  <input type="file" id="fi" name="front_image" accept=".png,.jpeg,jpg,svg,.icon"  required/>
+                  <label for="fi"><img src="/temp/image/icon//PlusCircle.png">Upload Image (.png,.jpeg,jpg,svg,.icon)</label>
+                 
+                </div>
+                <label class="w-100" >Pdf file</label>
+                <div class="filebox-group">
+                  <input type="file" id="fil" name="front_pdf" accept=".pdf"/>
+                  <label for= "fil"><img src="/temp/image/icon//PlusCircle.png">Upload PDF (.pdf)</label>
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="w-100" >Preview</label>
+                <div class="input-group">
+                  <input type="text" id="tv" class="usual-input short" name="tizer_video" required/>
+                </div>
+                <!-- <div class="filebox-group">
+                  <label for="tv"><img src="/temp/image/icon//PlusCircle.png"> Upload Video (.mp4)</label>
+                </div> -->
+              </div>
+              <div class="form_footer">
+                <button type="submit">Next</button> 
+                <small class="text-danger" id="err"></small>   
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="/temp/vendor/jquery/jquery.min.js"></script>
+    <script src="/temp/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  
+    <!-- Core plugin JavaScript-->
+    <script src="/temp/vendor/jquery-easing/jquery.easing.min.js"></script>
+  
+    <!-- Custom scripts for all pages-->
+    <script src="/temp/vendor/js/sb-admin-2.min.js"></script>
+  
+    <!-- Page level plugins -->
+    <script src="/temp/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/temp/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  
+    <!-- Page level custom scripts -->
+    <script src="/temp/vendor/js/demo/datatables-demo.js"></script>
+    <script src="/temp/ajax/courses-add.js"></script>
+</body>
+</html>

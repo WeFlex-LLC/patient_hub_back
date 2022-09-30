@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+   <link href="/temp/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+   <link href="/temp/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/temp/css/sb-admin-2.css">
+    <link rel="stylesheet" href="/temp/css/style.css">
+    <link rel="stylesheet" href="/temp/css/all.min.css">
+    <title>Admin</title>
+
+    <!-- T Edit -->
+    <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> -->
+    <script src="/temp/vendor/editor.js" referrerpolicy="origin"></script>
+    <script>
+      tinymce.init({
+    selector:'textarea',
+    plugins: 'print preview powerpaste casechange importcss tinydrive searchreplace autolink autosave save directionality advcode visualblocks visualchars fullscreen image link media mediaembed template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists checklist wordcount tinymcespellchecker a11ychecker  textpattern noneditable formatpainter permanentpen pageembed charmap tinycomments mentions linkchecker emoticons advtable',
+    menubar: 'file edit view insert format tools table tc help',
+    toolbar: 'undo redo |bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+    image_advtab: true,
+    height: 300,
+    image_caption: true,
+    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quicktable',
+      });
+    </script>
+    <!--End T Edit -->
+    
+  </head>
+  <body class="h-100" id="wrapper">
+    <div id="content-wrapper">
+      <%- include('topbar'); -%>
+      <div class="d-flex bg-white align-items-start" >
+        <%- include('vacancies-sidebar'); -%>
+        <div  class="d-flex flex-wrap w-100" id="bigBox">
+          <div class="w-25 p-4">
+            <form id="vacancies-app">
+              <label>URL</label>
+              <input type="text" class="form-control" value="<%=result.url%>" name="url" required>
+              <label>Վեռնագիր En</label>
+              <input type="text" class="form-control" value="<%=result.title_en%>" name="title_en" required>
+              <label>Վեռնագիր Aa</label>
+              <input type="text" class="form-control" value="<%=result.title_am%>" name="title_am">
+              <label>Վեռնագիր Ru</label>
+              <input type="text" class="form-control" value="<%=result.title_ru%>" name="title_ru">
+              <label>Հասցե En</label>
+              <input type="text" class="form-control" value="<%=result.location_en%>" name="location_en">
+              <label>Հասցե Am</label>
+              <input type="text" class="form-control" value="<%=result.location_am%>" name="location_am">
+              <label>Հասցե ru</label>
+              <input type="text" class="form-control" value="<%=result.location_ru%>" name="location_ru">
+              <label>Լեզու En</label>
+              <input type="text" class="form-control" value="<%=result.language_en%>" name="language_en">
+              <label>Լեզու Am</label>
+              <input type="text" class="form-control" value="<%=result.language_am%>" name="language_am">
+              <label>Լեզու RU</label>
+              <input type="text" class="form-control" value="<%=result.language_ru%>" name="language_ru">
+              <label>Աշխատաժամ</label>
+              <input type="text" class="form-control" value="<%=result.work_time%>" name="work_time">
+              <div class="form-check my-3">
+                <input class="form-check-input" type="radio" name="public" id="status1" value="1" <%if(result.public=='1'){%>checked<%}%> >
+                <label class="form-check-label" for="status1">
+                  Հրապարակված
+                </label>
+              </div>
+              <div class="form-check my-3">
+                <input class="form-check-input" type="radio" name="public" id="status2" value="0" <%if(result.public=='0'){%>checked<%}%> >
+                <label class="form-check-label" for="status2">
+                  Չհրապարակված
+                </label>
+              </div>
+              <button type="submit" class="btn btn-success w-100">Լրացնել</button>
+              <p class="text-danger text-center" id="err"></p>
+            </form>
+          </div>
+          <div class="w-75 p-4">
+            <label>En</label>
+            <textarea id="content_en"><%=result.text_en%></textarea>
+            <label>Am</label>
+            <textarea id="content_am"><%=result.text_am%></textarea>
+            <label>Ru</label>
+            <textarea id="content_ru"><%=result.text_ru%></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/temp/vendor/jquery/jquery.min.js"></script>
+    <script src="/temp/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/temp/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/temp/vendor/js/sb-admin-2.min.js"></script>
+    <script src="/temp/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/temp/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/temp/vendor/js/demo/datatables-demo.js"></script>
+    <script src="/temp/ajax/vacancies-app.js"></script>
+</body>
+</html>

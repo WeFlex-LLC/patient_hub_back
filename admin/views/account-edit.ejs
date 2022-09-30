@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Admin</title>
+  <link href="/temp/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link href="/temp/css/sb-admin-2.css" rel="stylesheet">
+</head>
+<body id="page-top">
+  <div id="wrapper">
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                  <div class="p-5">
+                    <div class="text-center">
+                      <h1 class="h4 text-gray-900 mb-4">Page Settings</h1>
+                    </div>
+                    <form class="user" id="addaccountForm">
+                      <div class="form-group">
+                        <input type="email" class="form-control form-control-user" id="email" placeholder="Email Address" readonly value="<%=user%>">
+                        <script>
+                            const user="<%=user%>";
+                        </script>
+                    </div>
+                      <div class="form-group">
+                        <input type="text" class="form-control form-control-user" id="name" placeholder="New Name"  value="<%=name%>" required>
+                        <p class="ml-2"><b>Warning:</b> You will see name change only after next login</p>
+                      </div>
+                      <div class="form-group">
+                        <input type="password" class="form-control form-control-user" id="password" placeholder="Old password" required>
+                      </div>
+                      <div class="form-group">
+                        <input type="password" class="form-control form-control-user" id="repassword" placeholder="New password" >
+                      </div>
+                      <p class="w-100 text-center text-danger" id="addaccounterr"></p>
+                      <button  class="btn btn-primary btn-user btn-block" id="save">Save</button>
+                      <hr>
+                    </form>
+                  </div>
+                </div>
+              </div>
+        </div>
+      </div>      
+    </div>
+  </div>
+  <script src="/temp/vendor/jquery/jquery.min.js"></script>
+  <script src="/temp/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/temp/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="/temp/js/sb-admin-2.js"></script>
+  <script src="/temp/ajax/account__edit_ajax.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link href="/temp/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="/temp/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="/temp/css/sb-admin-2.css">
+  <link rel="stylesheet" href="/temp/css/style.css">
+  <link rel="stylesheet" href="/temp/css/all.min.css">
+  <link rel="stylesheet" href="/temp/css/course.css">
+  <link rel="stylesheet" href="/temp/css/user.css">
+  <link rel="stylesheet" href="/temp/css/admin.css">
+</head>
+<body class="h-100" id="wrapper">
+  <div id="content-wrapper">
+    <div class="d-flex bg-white" >
+      <%- include('top-sidebar'); -%>
+      <div class="left-side">
+        <div class="user_search_box">
+          <form action="./users" method="get">
+            <input type="text" name="search" placeholder="Input Name of user" value=<%=search%>> 
+            <button type="submit">Search</button>
+          </form>
+        </div>
+        
+        <% if(status !== 3){ %>
+          <div class="add-btn-single-contanier">
+            <a href="./users/export" target="_blank" class="crt_quiz ml-3">Export List</a>
+          </div>
+        <% } else{ %>
+          <div class="add-btn-single-contanier">
+            <a class="crt_quiz ml-3">Export List</a>
+          </div>
+        <% } %>
+
+        <div class="adm_table users">
+          <%users.forEach(user=>{%>
+            <div class="tr">
+                <div class="td"><b><%= user.email %></b></div>
+                <div class="hr"></div>
+                <div class="td"><span>Registered</span><text><%=user.date%></text></div>
+                <div class="hr"></div>
+                <% if(user.credits){ %>
+                  <div class="td credits"><%=user.credits%> <br/> Credits</div>
+                <% } else{ %>  
+                  <div class="td credits">0 <br/> Credits</div>
+                <% } %>
+                <div class="td">
+                  <a href="./users/user-one/<%=user.id%>/courses">View Profile</a>
+                </div>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/temp/vendor/jquery/jquery.min.js"></script>
+  <script src="/temp/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="/temp/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="/temp/vendor/js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
+  <script src="/temp/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="/temp/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="/temp/vendor/js/demo/datatables-demo.js"></script>
+  <!-- <script src="/temp/ajax/account_ajax.js"></script> -->
+</body>
+</html>

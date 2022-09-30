@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link href="/temp/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="/temp/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="/temp/css/sb-admin-2.css">
+  <link rel="stylesheet" href="/temp/css/style.css">
+  <link rel="stylesheet" href="/temp/css/all.min.css">
+  <link rel="stylesheet" href="/temp/css/course.css">
+  <link rel="stylesheet" href="/temp/css/admin.css">
+</head>
+<body class="h-100" id="wrapper">
+  <div id="content-wrapper">
+    <div class="d-flex bg-white" >
+      <%- include('top-sidebar'); -%>
+      <div class="left-side">
+        <div class="add-btn-single-contanier">
+          <button class="btn-my-prm" onclick="adminPopup()">Add new admin</button>
+          <button class="crt_quiz ml-3" onclick="adminDel()">Deactivate Admin</button>
+        </div>
+        <div class="adm_table">
+          <%result.forEach(admin => {if (user!==admin.user) {%>
+            <div class="tr"  id="adminitem<%=admin.id%>">
+                <div class="td short"><input type="checkbox" class="deactiv_check" <%if(admin.status==1){%>disabled<%}%> value="<%=admin.id%>"></div>
+                <div class="td"><b><%=admin.name%></b></div>
+                <div class="hr"></div>
+                <div class="td"><%=admin.login%></div>
+                <div class="hr"></div>
+                <div class="td">
+                  <% if (admin.status==1) { %>
+                    Super admin
+                  <% } else if (admin.status==2) { %>
+                    Limited admin
+                  <% } else { %>
+                    Viewer admin
+                  <% } %>
+                </div>
+            </div>
+          <%}});%>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="adminPopup">
+    <form class="user" id="addaccountForm">
+      <p onclick="adminPopupClose()"><i class="fas fa-arrow-left"></i> back to /parent page/</p>
+      <h3>Create new administrator</h3>
+      <div>
+        <label>Email</label>
+        <input type="email" class="form-control form-control-user" id="email" placeholder="emailexample@gmail.com" required>
+      </div>
+      <div>
+        <label>Full Name</label>
+        <input type="text" class="form-control form-control-user" id="name" placeholder="Enter New Name" required>
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" class="form-control form-control-user" id="password" placeholder="Create strong password" required>
+      </div>
+      <div>
+        <input type="password" class="form-control form-control-user" id="repassword" placeholder="Repeat your password" required>
+      </div>
+      <div>
+        <!-- <div class="custom-control custom-checkbox small">
+          <input type="radio" class="custom-control-input" id="customCheck" name="status">
+          <label class="custom-control-label" for="customCheck">Full Admin (Status 1:Can control any other admins)</label>
+        </div> -->
+        
+        <div class="custom-control custom-checkbox small">
+          <input type="radio" class="custom-control-input" id="customCheck2" checked name="status">
+          <label class="custom-control-label" for="customCheck2" >Limited Admin (Status 2: Can not control any other admins)</label>
+        </div>
+
+        <div class="custom-control custom-checkbox small">
+          <input type="radio" class="custom-control-input" id="customCheck3" name="status">
+          <label class="custom-control-label" for="customCheck3">Viewer Admin (Status 3: Can only view the content)</label>
+        </div>
+      </div>
+      
+      <div class="form_footer">
+        <button id="save">Add</button>
+        <small class="text-danger" id="addaccounterr"></small>  
+      </div>
+      <hr>
+    </form>
+  </div>
+  <script src="/temp/vendor/jquery/jquery.min.js"></script>
+  <script src="/temp/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="/temp/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="/temp/vendor/js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
+  <script src="/temp/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="/temp/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="/temp/vendor/js/demo/datatables-demo.js"></script>
+  <script src="/temp/ajax/account_ajax.js"></script>
+</body>
+</html>

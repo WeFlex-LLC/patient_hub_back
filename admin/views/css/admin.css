@@ -1,0 +1,89 @@
+#adminPopup{
+ width: 100%;
+ height: 100%;
+ position: absolute;
+ z-index: 500; 
+ background: rgba(0, 0, 0, 0.5);  
+ overflow-y: auto;
+ display: none;
+}
+
+#adminPopup>form{
+    width: 746px;
+    height: auto;
+    background: #FFFFFF;
+    border-radius: 30px;
+    margin:50px auto;
+    padding:46px 100px;
+}
+
+
+#adminPopup>form>p{
+    display: flex;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #5D6978;
+    cursor: pointer;
+    
+}
+
+#adminPopup>form>p>i{
+    margin-right: 12px;
+}
+
+#adminPopup>form>h3{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #3C72F6;
+    margin-top: 40px;
+}
+
+#adminPopup>form>span{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    color: #8692A6;
+    margin-top: 15px;
+}
+
+
+#adminPopup>form>div{
+    margin-top: 17px;
+    display: grid;
+}
+
+#adminPopup>form>div>label{
+    margin-bottom: 7px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    color: #696F79;
+}
+#adminPopup>form>div>input{
+    background: #FFFFFF;
+    border: 1px solid rgba(21, 101, 216, 0.1);
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 12px 22px;
+    outline: none;
+    box-sizing: content-box;
+}
+

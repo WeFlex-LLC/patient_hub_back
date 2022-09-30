@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link href="/temp/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="/temp/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="/temp/css/sb-admin-2.css">
+  <link rel="stylesheet" href="/temp/css/style.css">
+  <link rel="stylesheet" href="/temp/css/all.min.css">
+  <link rel="stylesheet" href="/temp/css/course.css">
+  <link rel="stylesheet" href="/temp/css/user.css">
+  <link rel="stylesheet" href="/temp/css/admin.css">
+</head>
+<body class="h-100" id="wrapper">
+  <div id="content-wrapper">
+    <div class="d-flex bg-white" >
+      <%- include('top-sidebar'); -%>
+        <div class="left-side">
+            <div class="user_one_header">
+                <p><%=users.fname%> <%=users.lname%></p>
+                <div>
+                    <a href="./courses" class="<%if(key==='courses'){%>active<%}%>"><i class="fas fa-desktop"></i>Courses</a>
+                    <a href="./quizzes" class="<%if(key==='quizzes'){%>active<%}%>"><i class="fas fa-clipboard"></i>Quizzes</a>
+                    <a href="./payments"class="<%if(key==='payments'){%>active<%}%>"><i class="fas fa-wallet"></i>Payments</a>
+                    <a href="./credits" class="<%if(key==='credits'){%>active<%}%>"><i class="fas fa-credit-card "></i>Credits</a>
+                    <a href="./certificate" class="<%if(key==='certificate'){%>active<%}%>"><i class="fas fa-award"></i>Certificate</a>
+                </div>
+            </div>
+            <%if(key==='quizzes'){%>
+                <div class="quizzes_box">
+                    <p>Failed quizzes</p>
+                    <%quiz_data.failed.forEach(success=>{%>
+                        <div class="quiz_cart">
+                            <h5><%=success.quiz_titile%></h5>
+                            <p><%=success.quiz_desc%></p>
+                            <small><%=success.date%></small>
+                            <text><%=success.point%> Point</text>
+                        </div>
+                    <% }); %>
+                    <p>Completed quizzes</p>
+                    <%quiz_data.success.forEach(failed=>{%>
+                        <div class="quiz_cart">
+                            <h5><%=failed.quiz_titile%></h5>
+                            <p><%=failed.quiz_desc%></p>
+                            <small><%=failed.date%></small>
+                            <text><%=failed.point%> Point</text>
+                        </div>
+                    <% }); %>
+                </div>            
+            <%}%>
+            <%if(key==='credits'){%>
+                <div class="credits_box">
+                    <h4>Total score<span><%= credit %> <text>credits</text> </span></h4>
+                    <div class="adm_table users">
+                        <%list.forEach(quiz=>{%>
+                            <div class="tr">
+                                <div class="td"><b><%=quiz.quiz_titile%></b></div>
+                                <div class="hr"></div>
+                                <div class="td"><span><%if(quiz.success){%>Successfully passed<%}else{%>Failed<%}%></span><text><%=quiz.date%></text></div>
+                                <div class="hr"></div>
+                                <div class="td credits"><%= quiz.credit %> <br/> Credits</div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            <%}%>
+            <%if(key==='payments'){%>
+                <div class="payment_contnet">
+                    <%payData.forEach(data=>{%>
+                        <div class="containerpayitem">
+                            <img src="<%=host%>/public/uploads/courses/<%=data.id%>/<%=data.front_image%>"/>
+                             <h1><%=data.title%></h1>
+                             <div class="bordertop"></div>
+                             <div class="payedinfo">
+                                <p>Payed <%=data.money%> AMD</p>
+                                <h2><%=data.date_crt%></h2>
+                             </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <%}%>
+            <%if(key==='certificate'){%>
+                <div class="certificate_box">
+                    <%certificates.forEach(certificate=>{%>
+                        <div class="certificate">
+                            <h3><%=certificate.title%></h3>
+                            
+                            <img src="<%=host%>/public/uploads/users/<%=users.id%>/<%=certificate.file_name%>.png" /> 
+                            
+                            <small><%= certificate.date %></small>
+                            
+                            <% if(status !== 3){ %>
+                                <a href="<%=host%>/public/uploads/users/<%=users.id%>/<%=certificate.file_name%>.pdf" download="true" target="_blank">
+                                    Download as PDF
+                                </a>
+                            <% } else{ %>
+                                <a target="_blank">Download as PDF</a>
+                            <% } %>
+                            
+                        </div>
+                    <% }); %>
+                </div>
+            <%}%>
+        </div>
+    </div>
+  </div>
+  <script src="/temp/vendor/jquery/jquery.min.js"></script>
+  <script src="/temp/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="/temp/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="/temp/vendor/js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
+  <script src="/temp/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="/temp/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="/temp/vendor/js/demo/datatables-demo.js"></script>
+  <!-- <script src="/temp/ajax/account_ajax.js"></script> -->
+</body>
+</html>

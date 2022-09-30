@@ -1,0 +1,67 @@
+<!-- Sidebar -->
+<link href="/temp/css/menu.css" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" rel="stylesheet">
+<ul class="navbar-nav sidebar" id="accordionSidebar">  
+  <div class="sidebar-heading">
+    <div class="header-logo">
+        <a href="/admin"><img src="/temp/image/logo.png"/></a>
+    </div>
+    <div class="admin-ditails">
+        <div>
+          <img src="/temp/image/admin.png" alt="admin">
+          <p><%= user %></p>
+        </div>
+        <b id="sidebarToggle"></b>  
+    </div>
+  </div>
+  <div class="sidebar-heading">
+    <li class="nav-my-item mn_courses mn_add mn_couserOne">
+      <a class="nav-link" href="/admin/courses?public=1">
+        <i class="fas fa-desktop"></i>
+        <span>Courses</span>
+      </a>
+    </li>
+    <li class="nav-my-item mn_categories">
+      <a class="nav-link" href="/admin/courses/filter/categories">
+        <i class="fas fa-list "></i>
+        <span>Categories</span>
+      </a>
+    </li>
+    <li class="nav-my-item mn_theme">
+      <a class="nav-link" href="/admin/courses/filter/theme">
+        <i class="fas fa-comment-alt"></i>
+        <span>Topic</span>
+      </a>
+    </li>
+    <li class="nav-my-item mn_profs">
+      <a class="nav-link" href="/admin/courses/filter/profs">
+        <i class="fas fa-pencil-alt"></i>
+        <span>Author</span>
+      </a>
+    </li>
+    <li class="nav-my-item mn_users">
+      <a class="nav-link" href="/admin/users">
+        <i class="fas fa-users"></i>
+        <span>Users</span>
+      </a>
+    </li>
+    <%if(status===1){%>
+    <li class="nav-my-item mn_account">
+      <a class="nav-link" href="/admin/account">
+        <i class="fas fa-user"></i>
+        <span>Administrators</span>
+      </a>
+    </li>
+    <%}%>
+    <hr class="sidebar-divider">
+    <li class="nav-my-item" style="cursor: pointer;">
+      <a class="nav-link" onclick="logOut()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Sign Out</span>
+      </a>
+    </li>
+  </div>
+</ul>
+<script src="/temp/ajax/topbar.js"></script>
+<!-- End of Sidebar -->

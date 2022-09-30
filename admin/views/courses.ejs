@@ -1,0 +1,154 @@
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+   <link href="/temp/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+   <link href="/temp/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/temp/css/sb-admin-2.css">
+    <link rel="stylesheet" href="/temp/css/style.css">
+    <link rel="stylesheet" href="/temp/css/all.min.css">
+    <link rel="stylesheet" href="/temp/css/course.css">
+    <title>Admin</title>
+  </head>
+  <body class="h-100" id="wrapper">
+    <div id="content-wrapper">
+      <div class="d-flex bg-white" >
+        <%- include('top-sidebar'); -%>
+        <div class="left-side">
+          <ul class="course_meue">
+            <a href="?public=1">Published</a>
+            <a href="?public=0">Unpublished</a>
+          </ul>
+          
+          <% if(status !== 3){ %>
+            <div class="add-btn-single-contanier">
+              <a href="/admin/courses/add" class="btn-my-prm">Add new course</a>
+            </div>
+          <% } else{ %>
+            <div class="add-btn-single-contanier">
+              <a class="btn-my-prm">Add new course</a>
+            </div>
+          <% } %>
+
+          <div class="filterBox">
+            <div class="part1">
+              <select class="usual-input" id="f_category">
+                <option value="0" selected>Choose category</option>
+                <% category.forEach(function(filter){%>
+                  <option value="<%= filter.id %>"><%= filter.title %></option>
+                <% }); %>
+              </select>
+
+              <select class="usual-input" id="f_theme">
+                <option value="" selected>Choose Topic</option>
+                <% theme.forEach(function(filter){%>
+                  <option value="<%= filter.id %>" label="<%=filter.category_id%>"><%= filter.title %></option>
+                <% }); %>
+              </select>
+
+              <select class="usual-input" id="f_profesor">
+                <option value="" selected>Choose Author</option>
+                <% profs.forEach(function(filter){%>
+                  <option value="<%=filter.id%>" label="<%= filter.category_id %>"><%= filter.title %></option>
+                <% }); %>
+              </select>
+
+              <div>
+                <button class="btn-my-prm" id="setFilter">Filter</button>
+              </div>
+            </div>
+
+            <div class="part2">
+              <label>Sort By</label>
+              <div>
+                <select  id="sort">
+                    <option value="" selected disabled>You can select one or more filters</option> 
+                    <option value="view">View</option>            
+                    <option value="id">Date</option>            
+                    <option value="credits">Credits</option>            
+                </select>
+                <div>
+                  <button class="crt_quiz" id="clear_all">Clear All</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="courses_table">
+            <% courses.forEach(function(course){%>
+                <div class="courses_cart">
+                  <div class="courses_cart_header" onclick="cartSwitch(this)">
+                      <img src="/public/uploads/courses/<%=course.id%>/<%=course.front_image%>">
+                      <div>
+                        <%if(course.for_doctor==1){%><label>For Doctor<img src="/temp/image/icon/for_doctors.png"></label><%}%>
+                        <%if(course.for_medical==1){%><label>For medical worker<img src="/temp/image/icon/for_medical.png"></label><%}%>
+                        <%if(course.for_student==1){%><label>For students<img src="/temp/image/icon/for_student.png"></label><%}%>
+                      </div>
+                  </div>
+                  <div class="courses_cart_body">
+                      <div class="def">
+                        <h3><%=course.title%></h3>
+                        <p><%=course.front_text%></p>
+                        <div>
+                          <small><%=course.view%> view</small>
+                          <span><%=course.credits%> credits</span>
+                        </div>
+                        <hr>
+                        <div>
+                          <p><%=course.price_doctor%> AMD</p>
+                          <small><%=course.crt_date%></small>
+                        </div>
+                      </div>
+                      <div class="open">
+                        <a href="/admin/courses/one/<%=course.id%>"  target="_blank" class="edit">Edit</a>
+                        
+                        <%if(course.public === 0){%>
+                          <% if(status !== 3){ %>
+                            <button class="publish" value="1" onclick="changePublic('<%=course.id%>',this)">Publish</button>
+                          <% } else{ %>
+                            <button class="publish">Publish</button>
+                          <% } %>
+                        <%}else{%>
+                          <% if(status !== 3){ %>
+                            <button class="publish" value="0" onclick="changePublic('<%=course.id%>',this)">Unpublish</button>
+                          <% } else{ %>
+                            <button class="publish">Unpublish</button>
+                          <% } %>
+                        <%}%>
+
+                        <% if(status !== 3){ %>
+                          <button class="del" onclick="delCourse('<%=course.id%>',this)">Delete</button>
+                        <% } else{ %>
+                          <button class="del">Delete</button>
+                        <% } %>
+                        
+                        <a href="/admin/courses/one-comment/<%=course.id%>">Edit Comment</a>
+                      </div>
+                  </div>
+                </div>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/temp/vendor/jquery/jquery.min.js"></script>
+    <script src="/temp/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  
+    <!-- Core plugin JavaScript-->
+    <script src="/temp/vendor/jquery-easing/jquery.easing.min.js"></script>
+  
+    <!-- Custom scripts for all pages-->
+    <script src="/temp/vendor/js/sb-admin-2.min.js"></script>
+  
+    <!-- Page level plugins -->
+    <script src="/temp/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/temp/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  
+    <!-- Page level custom scripts -->
+    <script src="/temp/vendor/js/demo/datatables-demo.js"></script>
+    <script src="/temp/ajax/courses.js"></script>
+</body>
+</html>
