@@ -6,7 +6,6 @@
 # Node artifact files
 node_modules/
 dist/
-.env
 .htaccess
 admin/uploads
 # Compiled Java class files
@@ -49,6 +48,3 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-
-# js files
-app.js
