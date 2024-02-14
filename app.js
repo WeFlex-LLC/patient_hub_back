@@ -76,9 +76,6 @@ app.post('/admin/logout', (req, resp) => {
 //Cron job for disabled quizes
 CheckQuizes.CheckQuizes();
 
-app.listen(PORT);
-console.log('Backend started at :' + PORT);
-
 const assets = {
     main: {
         css: 'css/main.css',
@@ -96,3 +93,7 @@ const appRouter = createMiddleware.default({assets});
 
 app.use('/assets/', express.static(path.join(__dirname, 'client')))
 app.use(appRouter);
+
+app.listen(PORT, () => {
+    console.log(`Server started at http://localhost:${PORT}`);
+});
