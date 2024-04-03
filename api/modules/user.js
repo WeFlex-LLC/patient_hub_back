@@ -34,7 +34,7 @@ const { createCertificate } = require('../foo/pdfCreator.js');
 
 rout.post('/sign-up', authorization, async (req,resp) => {
     try {
-        const { email, pass, medical_profesional } = req.body;
+        const { email, pass } = req.body;
         
         const filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
@@ -52,7 +52,7 @@ rout.post('/sign-up', authorization, async (req,resp) => {
         
         let accessToken = jwt.sign({email, pass}, process.env.ACCESS_TOKEN_SECRT, {expiresIn:'720h'});
         
-        const set_user = await SQL.query(`INSERT INTO user (email,pass,medical_profesional,date,is_deleted) VALUES (?,?,?,?,?)`, [email,sha256(pass),medical_profesional,new Date().toDateString(),0]);
+        const set_user = await SQL.query(`INSERT INTO user (email,pass,date,is_deleted) VALUES (?,?,?,?,?)`, [email,sha256(pass),new Date().toDateString(),0]);
         
         const insertId = set_user[0].insertId;
 
@@ -196,7 +196,7 @@ rout.post('/update-settings', authentication, (req, resp) => {
         if (err) return resp.status(401).json({message: 'Missing Authentication Header'});
         
         try {
-            let { id, email, fname, lname, phone, pasport_number, date_birthday, medical_institut, medical_profesional } = req.body;
+            let { id, email, fname, lname, phone, pasport_number, date_birthday, medical_institut } = req.body;
             
             pasport_number = cryptr.encrypt(pasport_number);
 
@@ -220,10 +220,10 @@ rout.post('/update-settings', authentication, (req, resp) => {
                 oldImg !== "" ? await removeFileOne(`users/${id}`, oldImg) : '';
                 const filename = await uploadOneFile(`users/${id}`, profile);
 
-                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,pasport_number=?,date_birthday=?,medical_institut=?,medical_profesional=?,verify=?,img=? WHERE id=?',
-                                [email,fname,lname,phone,pasport_number,date_birthday,medical_institut,medical_profesional,verify,filename,id]);
+                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,pasport_number=?,date_birthday=?,medical_institut=?=?,verify=?,img=? WHERE id=?',
+                                [email,fname,lname,phone,pasport_number,date_birthday,medical_institut,verify,filename,id]);
             } else {
-                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,pasport_number=?,date_birthday=?,medical_institut=?,medical_profesional=?,verify=? WHERE id=?',[email,fname,lname,phone,pasport_number,date_birthday,medical_institut,medical_profesional,verify,id]);
+                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,pasport_number=?,date_birthday=?,medical_institut=?=?,verify=? WHERE id=?',[email,fname,lname,phone,pasport_number,date_birthday,medical_institut,verify,id]);
             }
 
             const upd_user = await SQL.query('SELECT * FROM user WHERE id=? AND is_deleted=?', [id, 0]);
@@ -404,7 +404,6 @@ rout.post('/create-certificate', authentication, async (req, resp) => {
             name: User && User.fname,
             lname: User && User.lname,
             passport: User && User.pasport_number,
-            prof: User && User.medical_profesional,
             course: Course && Course.title,
             quiz_title: Quiz_data && Quiz_data.quiz_titile,
             description: Course && Course.description,
@@ -642,7 +641,6 @@ rout.post('/get-certificate', authentication, (req, resp) => {
                 name: User.fname,
                 lname: User.lname,
                 passport: User.pasport_number,
-                prof: User.medical_profesional,
                 course: Course.title,
                 quiz_title: Quiz_data.quiz_titile,
                 description: Course.description,
@@ -737,9 +735,9 @@ rout.post("/send_success_quiz_admin_mail",authentication,(req,resp)=>{
         if (err) return resp.status(401).json({ message: 'Missing Authentication Header'});
 
         try {
-            const { title,date_crt,name,surname,phone,email,institut,medical_profesional } = req.body;
+            const { title,date_crt,name,surname,phone,email,institut } = req.body;
           console.log(req.body);
-            await mail.emailQuizSuccess(title,date_crt,name,surname,phone,email,institut,medical_profesional);
+            await mail.emailQuizSuccess(title,date_crt,name,surname,phone,email,institut);
             
             return resp.json({success: true});
         } catch(err) {
