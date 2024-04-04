@@ -52,7 +52,7 @@ rout.post('/sign-up', authorization, async (req,resp) => {
         
         let accessToken = jwt.sign({email, pass}, process.env.ACCESS_TOKEN_SECRT, {expiresIn:'720h'});
         
-        const set_user = await SQL.query(`INSERT INTO user (email,pass,date,is_deleted) VALUES (?,?,?,?,?)`, [email,sha256(pass),new Date().toDateString(),0]);
+        const set_user = await SQL.query(`INSERT INTO user (email,pass,date,is_deleted) VALUES (?,?,?,?)`, [email,sha256(pass),new Date().toDateString(),0]);
         
         const insertId = set_user[0].insertId;
 

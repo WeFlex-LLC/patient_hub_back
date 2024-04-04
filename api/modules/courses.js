@@ -21,7 +21,7 @@ rout.post('/get-all', authorization, async (req, resp) => {
 
         let courses = "";
 
-        get_all_courses = await SQL.query('SELECT id,title,url,front_text,front_image,for_doctor,for_medical,for_student,view,duration FROM courses WHERE public=1');
+        get_all_courses = await SQL.query('SELECT id,title,url,front_text,front_image,for_woman,for_parents,for_future_parents,view,duration FROM courses WHERE public=1');
         
         courses = get_all_courses[0];
             
@@ -40,9 +40,9 @@ rout.post('/get-all', authorization, async (req, resp) => {
 //         let get_all_courses = "";
 
 //         if (req.body.offset === undefined) {
-//             get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,for_doctor,for_medical,for_student,view,duration FROM courses WHERE public=1 ${filterList}`);
+//             get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,for_woman,for_parents,for_future_parents,view,duration FROM courses WHERE public=1 ${filterList}`);
 //         } else {
-//             get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,for_doctor,for_medical,for_student,view,duration FROM courses WHERE 
+//             get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,for_woman,for_parents,for_future_parents,view,duration FROM courses WHERE 
 //             public=1 ${filterList} LIMIT 10 OFFSET ${req.body.offset}`);
 //         }
         
@@ -157,11 +157,11 @@ rout.post('/get-all/by-filter', authorization, async(req, resp) => {
         let get_all_courses = "";
         
         if (req.body.offset === undefined) {
-            get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,for_doctor,for_medical,for_student,view,duration FROM courses WHERE public=1 ${filterList}`);
+            get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,for_woman,for_parents,for_future_parents,view,duration FROM courses WHERE public=1 ${filterList}`);
 
             resp.json(get_all_courses[0]);
         } else {
-            get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,for_doctor,for_medical,for_student,view,duration FROM courses WHERE 
+            get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,for_woman,for_parents,for_future_parents,view,duration FROM courses WHERE 
             public=1 ${filterList} LIMIT 10 OFFSET ${req.body.offset}`);
 
             next = await SQL.query(`SELECT id FROM courses WHERE public=1 ${filterList} LIMIT 10 OFFSET ${req.body.offset + 10}`);
