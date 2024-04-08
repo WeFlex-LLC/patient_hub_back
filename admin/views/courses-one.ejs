@@ -117,27 +117,21 @@
                   <label class="w-100">This Course for:</label>
 
                   <div class="radiobox-group">
-                    <input type="checkbox" id="r1" name="for_doctors" value="1" <%if(course.for_doctor==1){%>checked<%}%> hidden/>
-                    <label for="r1"><img src="/temp/image/icon/for_doctors.png">  For senior <br/> med. worker</label>
+                    <input type="checkbox" id="r1" name="for_woman" value="1" <%if(course.for_woman==1){%>checked<%}%> hidden/>
+                    <label for="r1"><img src="/temp/image/icon/for_doctors.png">  For Woman</label>
                     
-                    <input type="checkbox" id="r2" name="for_medical" value="1" <%if(course.for_medical==1){%>checked<%}%> hidden/>
-                    <label for="r2"><img src="/temp/image/icon/for_medical.png"> For mid-level <br/> med. worker</label>
+                    <input type="checkbox" id="r2" name="for_parents" value="1" <%if(course.for_parents==1){%>checked<%}%> hidden/>
+                    <label for="r2"><img src="/temp/image/icon/for_medical.png"> For Parents</label>
                     
-                    <input type="checkbox" id="r3" name="for_student" value="1" <%if(course.for_student==1){%>checked<%}%> hidden/>
-                    <label for="r3"><img src="/temp/image/icon/for_student.png">For students</label>
-
-                    <input type="checkbox" id="r4" name="for_pharmacist" value="1" <%if(course.for_pharmacist==1){%>checked<%}%> hidden/>
-                    <label for="r4"><img src="/temp/image/icon/for_student.png">For pharmacist</label>
-
-                    <input type="checkbox" id="r5" name="for_dispenser" value="1" <%if(course.for_dispenser==1){%>checked<%}%> hidden/>
-                    <label for="r5"><img src="/temp/image/icon/for_student.png">For dispenser</label>
+                    <input type="checkbox" id="r3" name="for_future_parents" value="1" <%if(course.for_future_parents==1){%>checked<%}%> hidden/>
+                    <label for="r3"><img src="/temp/image/icon/for_student.png">For Future Parents</label>
                   </div>
                 </div>
 
                 <div class="multiinput-group">
                   <div class="input-group">
                     <label class="w-100" >Set the Price</label>
-                    <input type="number" min="0" class="usual-input" placeholder="Input Price For Doctor" name="price_doctor" value="<%=course.price_doctor%>"/>
+                    <input type="number" min="0" class="usual-input" placeholder="Input Price For Woman" name="price_woman" value="<%=course.price_woman%>"/>
                   </div>
                 
                   <div class="input-group">
@@ -146,31 +140,17 @@
                       type="number" 
                       min="0" 
                       class="usual-input" 
-                      placeholder="Input Price For Medical" 
-                      name="price_medical" 
-                      value="<%= course.price_medical %>"
+                      placeholder="Input Price For Parents" 
+                      name="price_parents" 
+                      value="<%= course.price_parents %>"
                     />
                   </div>
                 
                   <div class="input-group">
                     <label class="w-100" ></label>
                     <input type="number" min="0" class="usual-input" 
-                    placeholder="Input Price Students" name="price_student" 
-                    value="<%= course.price_student %>"/>
-                  </div>
-
-                  <div class="input-group">
-                    <label class="w-100" ></label>
-                    <input type="number" min="0" class="usual-input" 
-                    placeholder="Input Price Pharmacist" name="price_pharmacist" 
-                    value="<%= course.price_pharmacist %>"/>
-                  </div>
-
-                  <div class="input-group">
-                    <label class="w-100" ></label>
-                    <input type="number" min="0" class="usual-input" 
-                    placeholder="Input Price Dispenser" name="price_dispenser" 
-                    value="<%= course.price_dispenser %>"/>
+                    placeholder="Input Price Future Parents" name="price_future_parents" 
+                    value="<%= course.price_future_parents %>"/>
                   </div>
                 </div>
                 

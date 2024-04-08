@@ -421,9 +421,9 @@ rout.post('/get-one-signed', authentication, async(req, resp) => {
             const course = get_all_courses[0][0];
             course.price = course[`price_${medical_profesional}`];
             
-            delete course.price_doctor;
-            delete course.price_medical;
-            delete course.price_student;
+            delete course.price_woman;
+            delete course.price_parents;
+            delete course.price_future_parents;
 
             const autorId = course.f_profesor;
             const get_autor = await SQL.query('SELECT title FROM cours_profs WHERE id=?', [autorId]);

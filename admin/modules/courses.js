@@ -193,7 +193,7 @@ rout.post('/add', async (req, resp) => {
     if (req.session.status === 3 && !req.session.logged) return;
 
     try {
-        let {title,url,front_text,description,price_dispenser,duration,for_woman,for_parents,for_future_parents,price_doctor,price_medical,price_pharmacist,price_student,promo_code,special_price,sale,credits,f_category,f_theme,f_profesor,tizer_video}=req.body;
+        let {title,url,front_text,description,duration,for_woman,for_parents,for_future_parents,price_woman,price_parents,price_future_parents,promo_code,special_price,sale,credits,f_category,f_theme,f_profesor,tizer_video}=req.body;
         
         f_theme = JSON.stringify(f_theme);
 
@@ -213,15 +213,15 @@ rout.post('/add', async (req, resp) => {
         
         const set_courses = await SQL.query(`
             INSERT INTO courses (
-            title, url, front_text, description, duration, for_woman, for_parents, for_future_parents, price_doctor, price_medical, 
-            price_student, price_pharmacist, price_dispenser, promo_code, special_price, sale, credits, 
+            title, url, front_text, description, duration, for_woman, for_parents, for_future_parents, price_woman, price_parents, 
+            price_future_parents, promo_code, special_price, sale, credits, 
             f_category, f_theme, f_profesor, crt_date, creator
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `, [
             title, url, front_text, description, duration, for_woman_val, for_parents_val,
-            for_future_parents_val, price_doctor, price_medical, price_student, 
-            price_pharmacist, price_dispenser, promo_code, special_price, sale, credits, f_category,
+            for_future_parents_val, price_woman, price_parents, price_future_parents, 
+            promo_code, special_price, sale, credits, f_category,
             f_theme, f_profesor, date, req.session.name
         ]
         );
@@ -267,7 +267,7 @@ rout.post('/edit', async(req, resp) => {
     if (req.session.status === 3 && !req.session.logged) return;
    
     try {
-        let { uid,title,url,front_text,description,duration,price_pharmacist,showquiz,price_dispenser,for_woman,for_parents,for_future_parents,price_doctor,price_medical,price_student,promo_code,special_price,sale,credits,f_category,f_theme=[],f_profesor,tizer_video } = req.body;
+        let { uid,title,url,front_text,description,duration,showquiz,for_woman,for_parents,for_future_parents,price_woman,price_parents,price_future_parents,promo_code,special_price,sale,credits,f_category,f_theme=[],f_profesor,tizer_video } = req.body;
          
        
        // console.log(uid,",uidddd");
@@ -314,8 +314,8 @@ rout.post('/edit', async(req, resp) => {
 
 
         
-        const set_courses = await SQL.query('UPDATE courses SET title=?,url=?,front_text=?,description=?,duration=?, for_woman=?,  for_parents=?,  for_future_parents=?,  price_doctor=?, price_medical=?, price_student=?, price_pharmacist=?, price_dispenser=?, promo_code=?,special_price=?,sale=?,credits=?,f_category=?,f_theme=?,f_profesor=?,front_image=?, front_pdf=?, tizer_video=? ,show_quiz=? WHERE id=?',
-        [title,  url,  front_text,  description,  duration,  for_woman_val, for_parents_val, for_future_parents_val,  price_doctor,   price_medical,   price_student, price_pharmacist, price_dispenser,  promo_code,  special_price,  sale,  credits,  f_category,  f_theme,  f_profesor,  cart_image_name,cart_pdf_name, tizer_video,showquiz ? 1 : 0,uid]);
+        const set_courses = await SQL.query('UPDATE courses SET title=?,url=?,front_text=?,description=?,duration=?, for_woman=?,  for_parents=?,  for_future_parents=?,  price_woman=?, price_parents=?, price_future_parents=?, promo_code=?,special_price=?,sale=?,credits=?,f_category=?,f_theme=?,f_profesor=?,front_image=?, front_pdf=?, tizer_video=? ,show_quiz=? WHERE id=?',
+        [title,  url,  front_text,  description,  duration,  for_woman_val, for_parents_val, for_future_parents_val,  price_woman,   price_parents,   price_future_parents,  promo_code,  special_price,  sale,  credits,  f_category,  f_theme,  f_profesor,  cart_image_name,cart_pdf_name, tizer_video,showquiz ? 1 : 0,uid]);
 
         if (!set_courses[0].affectedRows) return resp.json({success: false});
 
