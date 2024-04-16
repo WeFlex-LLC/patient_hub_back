@@ -167,7 +167,7 @@ const EmailVerifySignIn = (HOST, email, token) => {
                 
       <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.8;text-align:left;color:#000000;"><p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-size: 14px; font-family: Roboto, Tahoma, sans-serif;">Հարգելի օգտատեր,&nbsp;</span></p>
 <p style="font-family: Ubuntu, Helvetica, Arial;">&nbsp;</p>
-<p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-size: 14px; font-family: Roboto, Tahoma, sans-serif;">Շնորհակալություն cme.am առցանց դասընթացների և թեսթավորման համակարգում հաշիվ գրանցելու համար:</span><br><span style="font-size: 14px; font-family: Roboto, Tahoma, sans-serif;">Հաշիվը վավերացնելու համար, սեղմեք այստեղ&nbsp;&nbsp;</span></p>
+<p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-size: 14px; font-family: Roboto, Tahoma, sans-serif;">Շնորհակալություն patienthub.am առցանց դասընթացների և թեսթավորման համակարգում հաշիվ գրանցելու համար:</span><br><span style="font-size: 14px; font-family: Roboto, Tahoma, sans-serif;">Հաշիվը վավերացնելու համար, սեղմեք այստեղ&nbsp;&nbsp;</span></p>
 <p style="font-family: Ubuntu, Helvetica, Arial;">&nbsp;</p></div>
     
               </td>
@@ -192,7 +192,7 @@ const EmailVerifySignIn = (HOST, email, token) => {
             <tr>
               <td align="left" style="font-size:0px;padding:15px 15px 24px 31px;word-break:break-word;">
                 
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.5;text-align:left;color:#000000;"><p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Հարգանքով՝</span><br><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">CME.AM թիմ&nbsp;</span></p></div>
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.5;text-align:left;color:#000000;"><p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Հարգանքով՝</span><br><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Patienthub.am թիմ&nbsp;</span></p></div>
     
               </td>
             </tr>
@@ -422,7 +422,7 @@ const EmailVerify = (HOST, email, token) => {
           <tr>
             <td align="left" style="font-size:0px;padding:15px 15px 24px 31px;word-break:break-word;">
               
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.5;text-align:left;color:#000000;"><p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Հարգանքով՝</span><br><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">CME.AM թիմ&nbsp;</span></p></div>
+    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.5;text-align:left;color:#000000;"><p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Հարգանքով՝</span><br><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Patienthub.am թիմ&nbsp;</span></p></div>
   
             </td>
           </tr>
@@ -655,7 +655,7 @@ const EmailVerifyRecover = (HOST, email, token) => {
           <tr>
             <td align="left" style="font-size:0px;padding:15px 15px 24px 31px;word-break:break-word;">
               
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.5;text-align:left;color:#000000;"><p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Հարգանքով՝</span><br><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">CME.AM թիմ&nbsp;</span></p></div>
+    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.5;text-align:left;color:#000000;"><p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Հարգանքով՝</span><br><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Patienthub.am թիմ&nbsp;</span></p></div>
   
             </td>
           </tr>
@@ -870,7 +870,7 @@ const EmailCertificate = () => {
           <tr>
             <td align="left" style="font-size:0px;padding:15px 15px 24px 31px;word-break:break-word;">
               
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.5;text-align:left;color:#000000;"><p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Հարգանքով՝</span><br><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">CME.AM թիմ&nbsp;</span></p></div>
+    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.5;text-align:left;color:#000000;"><p style="font-family: Ubuntu, Helvetica, Arial;"><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Հարգանքով՝</span><br><span style="font-family: Roboto, Tahoma, sans-serif; font-size: 14px;">Patienthub.am թիմ&nbsp;</span></p></div>
 
             </td>
           </tr>
