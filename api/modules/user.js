@@ -220,10 +220,10 @@ rout.post('/update-settings', authentication, (req, resp) => {
                 oldImg !== "" ? await removeFileOne(`users/${id}`, oldImg) : '';
                 const filename = await uploadOneFile(`users/${id}`, profile);
 
-                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,pasport_number=?,date_birthday=?,medical_institut=?=?,verify=?,img=? WHERE id=?',
+                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,pasport_number=?,date_birthday=?,medical_institut=?,verify=?,img=? WHERE id=?',
                                 [email,fname,lname,phone,pasport_number,date_birthday,medical_institut,verify,filename,id]);
             } else {
-                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,pasport_number=?,date_birthday=?,medical_institut=?=?,verify=? WHERE id=?',[email,fname,lname,phone,pasport_number,date_birthday,medical_institut,verify,id]);
+                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,pasport_number=?,date_birthday=?,medical_institut=?,verify=? WHERE id=?',[email,fname,lname,phone,pasport_number,date_birthday,medical_institut,verify,id]);
             }
 
             const upd_user = await SQL.query('SELECT * FROM user WHERE id=? AND is_deleted=?', [id, 0]);
