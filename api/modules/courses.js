@@ -221,80 +221,79 @@ rout.post('/get-filter/', authorization, async(req, resp) => {
 rout.post('/get-all/by-filter-signed', authentication, (req,resp) => {
     jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRT, async err => {
         if (err) return resp.status(401).json({ message: 'Missing Authentication Header'});
+            const { filter } = req.body;
             
-            
-         if(typeof(req.body.filter.f_category)!="number" &&  req.body.filter.f_category!= undefined){
-                req.body.filter.f_category=parseInt(req.body.filter.f_category)
+         if(typeof(filter.f_category)!="number" &&  filter.f_category!= undefined){
+                filter.f_category=parseInt(filter.f_category)
           }
            
-          if(typeof(req.body.filter.f_theme)=='string'){
-            req.body.filter.f_theme=JSON.parse(req.body.filter.f_theme)
+          if(typeof(filter.f_theme)=='string'){
+            filter.f_theme=JSON.parse(filter.f_theme)
           }
-          if(typeof(req.body.filter.f_profesor)=='string'){
-            req.body.filter.f_profesor=JSON.parse(req.body.filter.f_profesor)
+          if(typeof(filter.f_profesor)=='string'){
+            filter.f_profesor=JSON.parse(filter.f_profesor)
           }
 
-          if(typeof(req.body.filter.f_theme)=='string'){
-            req.body.filter.f_theme=[]
+          if(typeof(filter.f_theme)=='string'){
+            filter.f_theme=[]
           }
-          if(typeof(req.body.filter.f_profesor)=='string'){
-            req.body.filter.f_profesor=[]
+          if(typeof(filter.f_profesor)=='string'){
+            filter.f_profesor=[]
           }
 
         try {
             let filterList = "";
             
-            const forType = "for_" + req.body.filter.medical_profesional;
+            const forType = filter.medical_profesional ? "for_" + filter.medical_profesional : null;
 
-            if (req.body.filter.medical_profesional) {
-                delete req.body.filter.medical_profesional;
+            if (filter.medical_profesional || filter.medical_profesional == null) {
+                delete filter.medical_profesional;
             }
-            
-            
-            for (const property in req.body.filter) {
-                if (property === "f_theme" && req.body.filter.f_theme.length !=null) {
-                   
-                    if(req.body.filter.f_theme.length==1){
-                    filterList = filterList + ` AND ${property} LIKE '%${req.body.filter.f_theme[0]}%' `;
-                    }else if(req.body.filter.f_theme.length==2){
-                        filterList = filterList + ` AND (${property} LIKE '%${req.body.filter.f_theme[0]}%' OR ${property} LIKE '%${req.body.filter.f_theme[1]}%')`;
-                    }else if(req.body.filter.f_theme.length==3){
-                        filterList = filterList + ` AND (${property} LIKE '%${req.body.filter.f_theme[0]}%' OR ${property} LIKE '%${req.body.filter.f_theme[1]}%' OR ${property} LIKE '%${req.body.filter.f_theme[2]}%')`;
 
-                    }else if(req.body.filter.f_theme.length==4){
-                        filterList = filterList + ` AND (${property} LIKE '%${req.body.filter.f_theme[0]}%' OR ${property} LIKE '%${req.body.filter.f_theme[1]}%' OR ${property} LIKE '%${req.body.filter.f_theme[2]}%' OR ${property} LIKE '%${req.body.filter.f_theme[3]}%')`;
+            for (const property in filter) {
+                if (property === "f_theme" && filter.f_theme.length !=null) {
+                   
+                    if(filter.f_theme.length==1){
+                        filterList += `${filterList.length ? ' AND ' : ''} ${property} LIKE '%${filter.f_theme[0]}%' `;
+                    }else if(filter.f_theme.length==2){
+                        filterList += `${filterList.length ? ' AND ' : ''} (${property} LIKE '%${filter.f_theme[0]}%' OR ${property} LIKE '%${filter.f_theme[1]}%')`;
+                    }else if(filter.f_theme.length==3){
+                        filterList += `${filterList.length ? ' AND ' : ''} (${property} LIKE '%${filter.f_theme[0]}%' OR ${property} LIKE '%${filter.f_theme[1]}%' OR ${property} LIKE '%${filter.f_theme[2]}%')`;
+
+                    }else if(filter.f_theme.length==4){
+                        filterList += `${filterList.length ? ' AND ' : ''} (${property} LIKE '%${filter.f_theme[0]}%' OR ${property} LIKE '%${filter.f_theme[1]}%' OR ${property} LIKE '%${filter.f_theme[2]}%' OR ${property} LIKE '%${filter.f_theme[3]}%')`;
 
                     }
-                }else if(property=="f_profesor" && req.body.filter.f_profesor.length!=null){
-                       if(req.body.filter.f_profesor.length==1){
-                        filterList = filterList + ` AND ${property}=${req.body.filter.f_profesor[0]}`;
-                       }else if(req.body.filter.f_profesor.length==2){
-                        filterList = filterList + ` AND (${property}=${req.body.filter.f_profesor[0]} OR ${property}=${req.body.filter.f_profesor[1]})`;
-                       }else if(req.body.filter.f_profesor.length==3){
-                        filterList = filterList + ` AND (${property}=${req.body.filter.f_profesor[0]} OR ${property}=${req.body.filter.f_profesor[1] } OR ${property}=${req.body.filter.f_profesor[2]})`;
+                }else if(property=="f_profesor" && filter.f_profesor.length!=null){
+                       if(filter.f_profesor.length==1){
+                        filterList += `${filterList.length ? ' AND ' : ''} ${property}=${filter.f_profesor[0]}`;
+                       }else if(filter.f_profesor.length==2){
+                        filterList += `${filterList.length ? ' AND ' : ''} (${property}=${filter.f_profesor[0]} OR ${property}=${filter.f_profesor[1]})`;
+                       }else if(filter.f_profesor.length==3){
+                        filterList += `${filterList.length ? ' AND ' : ''} (${property}=${filter.f_profesor[0]} OR ${property}=${filter.f_profesor[1] } OR ${property}=${filter.f_profesor[2]})`;
                        }
                     
                 }else{
-                    filterList = filterList + ` AND ${property}=${req.body.filter[property]}`;
+                    filterList += `${filterList.length ? ' AND ' : ''} ${property}=${filter[property]}`;
                 }
             }
 
             
-            console.log(filterList,"filterList");
+            // console.log(filterList,"filterList");
             filterList = filterList.trim();
 
             let get_all_courses = "";
             
             if (req.body.offset == undefined) {
-                get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,view,duration FROM courses WHERE public=1 AND ${forType}=1 ${filterList}`);
+                get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,view,duration FROM courses WHERE public=1 ${forType ? 'AND ' + forType + '=1' : ''} ${filterList ? ' AND ' + filterList : ''}`);
                 resp.json(get_all_courses[0]);
             } else {
                 
-                get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,view,duration FROM courses WHERE public=1 AND ${forType}=1 ${filterList}
+                get_all_courses = await SQL.query(`SELECT id,title,url,front_text,front_image,view,duration FROM courses WHERE public=1 ${forType ? 'AND ' + forType + '=1' : ''} ${filterList ? ' AND ' + filterList : ''}
                 LIMIT 10 OFFSET ${req.body.offset}`);
                 
                 
-                next = await SQL.query(`SELECT id FROM courses WHERE public=1 AND ${forType}=1 ${filterList} LIMIT 10 OFFSET ${req.body.offset + 10}`);
+                next = await SQL.query(`SELECT id FROM courses WHERE public=1 ${forType ? 'AND ' + forType + '=1' : ''} ${filterList ? ' AND ' + filterList : ''} LIMIT 10 OFFSET ${req.body.offset + 10}`);
                 next = next[0].length;
                 
                 resp.json({courses: get_all_courses[0], next: next});
@@ -311,7 +310,7 @@ rout.post("/my-courses", authentication, async (req, resp) => {
         if (err) return resp.status(401).json({ message: 'Missing Authentication Header'});
 
         try {
-            const user_type = "for_" + req.body.user_type;
+            const user_type = req.body.user_type ? "for_" + req.body.user_type : null;
 
             let courses_ids = await SQL.query('SELECT course_id FROM orders WHERE user_id=? AND status=?', [req.body.user_id, 1]);
             
@@ -344,7 +343,7 @@ rout.post("/my-courses", authentication, async (req, resp) => {
 
             used_ids.length ? used_ids = used_ids.join(",") : used_ids = 0;
             
-            let recommended = await SQL.query(`SELECT * FROM courses WHERE ${user_type}=1 AND public=1 AND id NOT IN (${used_ids})`)
+            let recommended = await SQL.query(`SELECT * FROM courses WHERE ${user_type ? user_type + '=1 AND ' : ''} public=1 AND id NOT IN (${used_ids})`)
             
             recommended = recommended[0];
              let moneyCourses = await SQL.query('SELECT money ,course_id,date_crt FROM orders WHERE user_id=? AND status=?',[req.body.user_id,1])
