@@ -315,7 +315,7 @@ rout.post('/edit', async(req, resp) => {
 
         
         const set_courses = await SQL.query('UPDATE courses SET title=?,url=?,front_text=?,description=?,duration=?, for_woman=?,  for_parents=?,  for_future_parents=?,  price_woman=?, price_parents=?, price_future_parents=?, promo_code=?,special_price=?,sale=?,f_category=?,f_theme=?,f_profesor=?,front_image=?, front_pdf=?, tizer_video=? WHERE id=?',
-        [title,  url,  front_text,  description,  duration,  for_woman_val, for_parents_val, for_future_parents_val,  price_woman,   price_parents,   price_future_parents,  promo_code,  special_price,  sale,  f_category,  f_theme,  f_profesor,  cart_image_name,cart_pdf_name, tizer_video ? 1 : 0,uid]);
+        [title,  url,  front_text,  description,  duration,  for_woman_val, for_parents_val, for_future_parents_val,  price_woman,   price_parents,   price_future_parents,  promo_code,  special_price,  sale,  f_category,  f_theme,  f_profesor,  cart_image_name,cart_pdf_name, tizer_video, uid]);
 
         if (!set_courses[0].affectedRows) return resp.json({success: false});
 
