@@ -86,10 +86,6 @@ rout.post('/sign-in', authorization, async (req, resp) => {
         
         let accessToken = jwt.sign({email,pass}, process.env.ACCESS_TOKEN_SECRT, {expiresIn:'720h'});
 
-        if (user.pasport_number && user.pasport_number.length > 20) {
-            user.pasport_number = cryptr.decrypt(user.pasport_number)
-        }
-
         resp.json({user, accessToken});
     } catch(err) {
         console.log(err)
@@ -196,9 +192,7 @@ rout.post('/update-settings', authentication, (req, resp) => {
         if (err) return resp.status(401).json({message: 'Missing Authentication Header'});
         
         try {
-            let { id, email, fname, lname, phone, pasport_number, date_birthday, medical_institut } = req.body;
-            
-            pasport_number = cryptr.encrypt(pasport_number);
+            let { id, email, fname, lname, phone, date_birthday, medical_profesional } = req.body;
 
             const { profile } = req.files;
 
@@ -215,22 +209,19 @@ rout.post('/update-settings', authentication, (req, resp) => {
             let verify = get_usr[0][0].verify;
             
             if (oldEmail !== email) verify = 0;
-
             if (profile !== undefined) {
                 oldImg !== "" ? await removeFileOne(`users/${id}`, oldImg) : '';
                 const filename = await uploadOneFile(`users/${id}`, profile);
 
-                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,pasport_number=?,date_birthday=?,medical_institut=?,verify=?,img=? WHERE id=?',
-                                [email,fname,lname,phone,pasport_number,date_birthday,medical_institut,verify,filename,id]);
+                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,date_birthday=?,medical_profesional=?,verify=?,img=? WHERE id=?',
+                                [email,fname,lname,phone,date_birthday, medical_profesional,verify,filename,id]);
             } else {
-                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,pasport_number=?,date_birthday=?,medical_institut=?,verify=? WHERE id=?',[email,fname,lname,phone,pasport_number,date_birthday,medical_institut,verify,id]);
+                await SQL.query('UPDATE user SET email=?,fname=?,lname=?,phone=?,date_birthday=?,medical_profesional=?,verify=? WHERE id=?',[email,fname,lname,phone,date_birthday,medical_profesional,verify,id]);
             }
 
             const upd_user = await SQL.query('SELECT * FROM user WHERE id=? AND is_deleted=?', [id, 0]);
             
             const user = upd_user[0][0];
-
-            user.pasport_number = cryptr.decrypt(user.pasport_number)
 
             return resp.json({success: true, user});
         } catch (err) {
@@ -355,11 +346,11 @@ rout.post("/check-fields", authentication, async (req, resp) => {
     try {
         const { id } = req.body;
 
-        const sql = await SQL.query("SELECT email, fname, lname, pasport_number, phone, verify, date_birthday FROM user WHERE id=?", [id]);
+        const sql = await SQL.query("SELECT email, fname, lname, phone, verify, date_birthday FROM user WHERE id=?", [id]);
 
         if (!sql[0].length) return resp.json({status: false});
 
-        if (!sql[0][0].email || !sql[0][0].fname || !sql[0][0].lname || !sql[0][0].pasport_number || !sql[0][0].phone || !sql[0][0].verify || !sql[0][0].date_birthday) {
+        if (!sql[0][0].email || !sql[0][0].fname || !sql[0][0].lname || !sql[0][0].phone || !sql[0][0].verify || !sql[0][0].date_birthday) {
             return resp.json({status: false});
         }
 
@@ -377,10 +368,6 @@ rout.post('/create-certificate', authentication, async (req, resp) => {
         const get_user = await SQL.query('SELECT * FROM user WHERE id=? AND is_deleted=?', [user_id, 0]);
 
         const User = get_user[0][0];
-
-        if (User && User.pasport_number && User.pasport_number.length > 20) {
-            User.pasport_number = cryptr.decrypt(User.pasport_number)
-        }
 
         const get_course = await SQL.query('SELECT * FROM courses WHERE id=?', [course_id]);
 
@@ -403,7 +390,6 @@ rout.post('/create-certificate', authentication, async (req, resp) => {
             uid: User && User.id,
             name: User && User.fname,
             lname: User && User.lname,
-            passport: User && User.pasport_number,
             course: Course && Course.title,
             quiz_title: Quiz_data && Quiz_data.quiz_titile,
             description: Course && Course.description,
@@ -468,16 +454,11 @@ rout.post('/create-certificate', authentication, async (req, resp) => {
         // date = date.split("T")
         // date = date[0];
         // date = date.split("-").join(".");
-        
-        // if (User.pasport_number && User.pasport_number.length > 20) {
-        //     User.pasport_number = cryptr.decrypt(User.pasport_number)
-        // }
 
         // const passedData = {
         //     uid: User.id,
         //     name: User.fname,
         //     lname: User.lname,
-        //     passport: User.pasport_number,
         //     prof: User.medical_profesional,
         //     course: Course.title,
         //     quiz_title: Quiz && Quiz.title,
@@ -524,7 +505,6 @@ rout.post('/create-certificate', authentication, async (req, resp) => {
 //                 name:User.fname,
 //                 lname:User.lname,
 //                 prof:User.medical_profesional,
-//                 passport:User.pasport_number,
 //                 course:Course.title,
 //                 quiz_title:Quiz.title,
 //                 description:Course.description,
@@ -579,20 +559,12 @@ rout.post("/user-all-certificates", authentication, (req, resp) => {
             // return;
 
             // const data = await SQL.query(
-            //     `SELECT DISTINCT u.pasport_number, c.title, c.date, uq.point, c.file_name FROM certificate as c JOIN user as u ON c.user_id=u.id JOIN user_quiz as uq 
+            //     `SELECT DISTINCT c.title, c.date, uq.point, c.file_name FROM certificate as c JOIN user as u ON c.user_id=u.id JOIN user_quiz as uq 
             //     ON uq.quiz_id=c.quiz_id AND uq.success=? WHERE u.id=?
             //     `, [1, req.body.user_id]
             // );
             
             // let res = data[0];
-
-            // if (res.length) {
-            //     for (var i = 0; i < res.length; i++) {
-            //         if (res[i].pasport_number && res[i].pasport_number.length > 20) {
-            //             res[i].pasport_number = cryptr.decrypt(res[i].pasport_number)
-            //         }
-            //     }
-            // }
 
             // resp.json({data: res})
         } catch (err) {
@@ -612,10 +584,6 @@ rout.post('/get-certificate', authentication, (req, resp) => {
             const get_user = await SQL.query('SELECT * FROM user WHERE id=?', [user_id]);
 
             const User = get_user[0][0];
-
-            if (User && User.pasport_number && User.pasport_number.length > 20) {
-                User.pasport_number = cryptr.decrypt(User.pasport_number)
-            }
 
             const get_course = await SQL.query('SELECT * FROM courses WHERE id=?', [courseId]);
             
@@ -640,7 +608,6 @@ rout.post('/get-certificate', authentication, (req, resp) => {
                 uid: User.id,
                 name: User.fname,
                 lname: User.lname,
-                passport: User.pasport_number,
                 course: Course.title,
                 quiz_title: Quiz_data.quiz_titile,
                 description: Course.description,
@@ -683,16 +650,11 @@ rout.post('/get-certificate', authentication, (req, resp) => {
             // date = date.split("T")
             // date = date[0];
             // date = date.split("-").join(".");
-
-            // if (User.pasport_number && User.pasport_number.length > 20) {
-            //     User.pasport_number = cryptr.decrypt(User.pasport_number)
-            // }
-
+    
             // const passedData = {
             //     uid: User.id,
             //     name: User.fname,
             //     lname: User.lname,
-            //     passport: User.pasport_number,
             //     prof:User.medical_profesional,
             //     course:Course.title,
             //     quiz_title:Quiz.title,

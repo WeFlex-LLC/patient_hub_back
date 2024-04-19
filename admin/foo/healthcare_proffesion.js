@@ -1,15 +1,15 @@
 const healthcare_proffesion = [
     {
-        label: 'ուսանող',
-        value: 'student'
+        label: 'Կանանց համար',
+        value: 'woman'
     },
     {
-        label: 'բուժաշխատող',
-        value: 'medical'
+        label: 'Ծնողների համար',
+        value: 'parents'
     },
     {
-        label: 'բժիշկ',
-        value: 'doctor'
+        label: 'Ապագա ծնողների համար',
+        value: 'future_parents'
     }
 ];
 

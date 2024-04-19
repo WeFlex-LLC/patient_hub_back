@@ -25,7 +25,7 @@
                     <a href="./courses" class="<%if(key==='courses'){%>active<%}%>"><i class="fas fa-desktop"></i>Courses</a>
                     <a href="./quizzes" class="<%if(key==='quizzes'){%>active<%}%>"><i class="fas fa-clipboard"></i>Quizzes</a>
                     <a href="./payments"class="<%if(key==='payments'){%>active<%}%>"><i class="fas fa-wallet"></i>Payments</a>
-                    <a href="./credits" class="<%if(key==='credits'){%>active<%}%>"><i class="fas fa-credit-card "></i>Credits</a>
+                    <!-- <a href="./credits" class="<%if(key==='credits'){%>active<%}%>"><i class="fas fa-credit-card "></i>Credits</a> -->
                     <a href="./certificate" class="<%if(key==='certificate'){%>active<%}%>"><i class="fas fa-award"></i>Certificate</a>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                     <% }); %>
                 </div>            
             <%}%>
-            <%if(key==='credits'){%>
+            <!-- <%if(key==='credits'){%>
                 <div class="credits_box">
                     <h4>Total score<span><%= credit %> <text>credits</text> </span></h4>
                     <div class="adm_table users">
@@ -66,7 +66,7 @@
                         <% }); %>
                     </div>
                 </div>
-            <%}%>
+            <%}%> -->
             <%if(key==='payments'){%>
                 <div class="payment_contnet">
                     <%payData.forEach(data=>{%>

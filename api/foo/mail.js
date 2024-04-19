@@ -115,7 +115,7 @@ const sendCertificate = async (email, uid, pdf, quiz_id) => {
         const get_quiz = await SQL.query('SELECT cours_id, title FROM cours_quiz WHERE id=?', [quiz_id]);
         const Quiz = get_quiz[0][0];
 
-        const get_user = await SQL.query('SELECT id, fname, lname, pasport_number, medical_profesional FROM user WHERE id=?', [uid]);
+        const get_user = await SQL.query('SELECT id, fname, lname, medical_profesional FROM user WHERE id=?', [uid]);
         const User = get_user[0][0];
 
         const course_id = Quiz.cours_id;
@@ -133,7 +133,6 @@ const sendCertificate = async (email, uid, pdf, quiz_id) => {
             uid: User.id,
             name: User.fname,
             lname: User.lname,
-            passport: User.pasport_number,
             prof:User.medical_profesional,
             course:Course.title,
             quiz_title:Quiz.title,

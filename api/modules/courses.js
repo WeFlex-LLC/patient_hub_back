@@ -524,136 +524,136 @@ rout.post('/get-quiz-questions', authentication, async (req, resp) => {
     })
 })
 
-rout.post('/get-step-quiz', authentication, async (req, resp) => {
-    jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRT, async err => {
-        if (err) return resp.status(401).json({ message: 'Missing Authentication Header' });
+// rout.post('/get-step-quiz', authentication, async (req, resp) => {
+//     jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRT, async err => {
+//         if (err) return resp.status(401).json({ message: 'Missing Authentication Header' });
 
-        let { course_id, step } = req.body;
+//         let { course_id, step } = req.body;
 
-        const getQuizQuery = await SQL.query(`
-            SELECT * FROM cours_quiz WHERE cours_id=? AND step=?
-        `, [course_id, step]);
+//         const getQuizQuery = await SQL.query(`
+//             SELECT * FROM cours_quiz WHERE cours_id=? AND step=?
+//         `, [course_id, step]);
 
-        let quiz = getQuizQuery[0][0];
+//         let quiz = getQuizQuery[0][0];
 
-        if (quiz) {
-            quiz.questions = JSON.parse(quiz.questions);
+//         if (quiz) {
+//             quiz.questions = JSON.parse(quiz.questions);
 
-            let get_course_url = await SQL.query('SELECT url, credits FROM courses WHERE id=?', [course_id]);
+//             let get_course_url = await SQL.query('SELECT url, credits FROM courses WHERE id=?', [course_id]);
             
-            quiz.course_url = get_course_url[0][0].url;
+//             quiz.course_url = get_course_url[0][0].url;
             
-            quiz.course_credits = get_course_url[0][0].credits;
-        } else {
-            quiz = {status: "unavailable"};
-        }
+//             quiz.course_credits = get_course_url[0][0].credits;
+//         } else {
+//             quiz = {status: "unavailable"};
+//         }
 
-        resp.json(quiz);
-    })
-})
+//         resp.json(quiz);
+//     })
+// })
 
-rout.post('/get-quiz', authentication, async (req, resp) => {
-    jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRT, async err => {
-        if (err) return resp.status(401).json({ message: 'Missing Authentication Header' });
+// rout.post('/get-quiz', authentication, async (req, resp) => {
+//     jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRT, async err => {
+//         if (err) return resp.status(401).json({ message: 'Missing Authentication Header' });
         
-        let { course_id, user_id, step } = req.body;
+//         let { course_id, user_id, step } = req.body;
         
-        try {
-            let get_current_step = "";
+//         try {
+//             let get_current_step = "";
 
-            if (step) {
-                get_current_step = await SQL.query(`
-                SELECT step, success FROM user_quiz WHERE course_id=? AND user_id=? AND step=?
-            `, [course_id, user_id, step]);
-            } else {
-                get_current_step = await SQL.query(`
-                SELECT step, success FROM user_quiz WHERE course_id=? AND user_id=?
-            `, [course_id, user_id]);
-            }
+//             if (step) {
+//                 get_current_step = await SQL.query(`
+//                 SELECT step, success FROM user_quiz WHERE course_id=? AND user_id=? AND step=?
+//             `, [course_id, user_id, step]);
+//             } else {
+//                 get_current_step = await SQL.query(`
+//                 SELECT step, success FROM user_quiz WHERE course_id=? AND user_id=?
+//             `, [course_id, user_id]);
+//             }
 
-            get_current_step = get_current_step[0];
+//             get_current_step = get_current_step[0];
 
-            if (!step) {
-                step = 1;
-            }
+//             if (!step) {
+//                 step = 1;
+//             }
             
-            const get_quiz = await SQL.query('SELECT * FROM cours_quiz WHERE cours_id=? AND step=?', 
-            [course_id, step]);
+//             const get_quiz = await SQL.query('SELECT * FROM cours_quiz WHERE cours_id=? AND step=?', 
+//             [course_id, step]);
             
-            let quiz = get_quiz[0][0];
+//             let quiz = get_quiz[0][0];
 
-            if (quiz) {
-                quiz.questions = JSON.parse(quiz.questions);
+//             if (quiz) {
+//                 quiz.questions = JSON.parse(quiz.questions);
 
-                let get_course_url = await SQL.query('SELECT url, credits FROM courses WHERE id=?', [course_id]);
+//                 let get_course_url = await SQL.query('SELECT url, credits FROM courses WHERE id=?', [course_id]);
                 
-                quiz.course_url = get_course_url[0][0].url;
+//                 quiz.course_url = get_course_url[0][0].url;
                 
-                quiz.course_credits = get_course_url[0][0].credits;    
-            } else {
-                quiz = {status: "unavailable"};
-            }
+//                 quiz.course_credits = get_course_url[0][0].credits;    
+//             } else {
+//                 quiz = {status: "unavailable"};
+//             }
         
-            resp.json(quiz);
-        } catch (err) {
-            console.log(err)
-            resp.status(403).json({ msg: 'Something Was Wrong, Try Again' });
-        } 
-    })
-})
+//             resp.json(quiz);
+//         } catch (err) {
+//             console.log(err)
+//             resp.status(403).json({ msg: 'Something Was Wrong, Try Again' });
+//         } 
+//     })
+// })
 
-rout.post('/set-quiz-result', authentication, async (req, resp) => {
-    jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRT, async err => {
-        if (err) return resp.status(401).json({ message: 'Missing Authentication Header'});
+// rout.post('/set-quiz-result', authentication, async (req, resp) => {
+//     jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRT, async err => {
+//         if (err) return resp.status(401).json({ message: 'Missing Authentication Header'});
 
-        let { course_id, quiz_id, quiz_titile, quiz_desc, credit, point, success, date, step, user_id, trueAnswers } = req.body;
+//         let { course_id, quiz_id, quiz_titile, quiz_desc, credit, point, success, date, step, user_id, trueAnswers } = req.body;
 
-        if (success == false) credit = 0;
+//         if (success == false) credit = 0;
         
-        try {
-            const get_quiz = await SQL.query('SELECT * FROM user_quiz WHERE course_id=? && quiz_id=? && user_id=?', [course_id, quiz_id, user_id]);
+//         try {
+//             const get_quiz = await SQL.query('SELECT * FROM user_quiz WHERE course_id=? && quiz_id=? && user_id=?', [course_id, quiz_id, user_id]);
 
-            if (get_quiz[0].length > 0) {
-                await SQL.query('UPDATE user_quiz SET quiz_titile=?,quiz_desc=?,credit=?,point=?,success=?,trueAnswers=?,date=?,step=? WHERE course_id=? && quiz_id=? && user_id=?',
-                                [quiz_titile, quiz_desc,  credit,  point,  success,  trueAnswers, date, step, course_id, quiz_id, user_id]);
+//             if (get_quiz[0].length > 0) {
+//                 await SQL.query('UPDATE user_quiz SET quiz_titile=?,quiz_desc=?,credit=?,point=?,success=?,trueAnswers=?,date=?,step=? WHERE course_id=? && quiz_id=? && user_id=?',
+//                                 [quiz_titile, quiz_desc,  credit,  point,  success,  trueAnswers, date, step, course_id, quiz_id, user_id]);
                 
-                let insertId = null;
+//                 let insertId = null;
 
-                if (success) {
-                    insertId = get_quiz[0][0].id;
-                }
+//                 if (success) {
+//                     insertId = get_quiz[0][0].id;
+//                 }
                 
-                resp.json({success: true, insertId});
-            } else {
-                const set_quiz = await SQL.query('INSERT INTO user_quiz (course_id,quiz_id,quiz_titile,quiz_desc,credit,point,success,trueAnswers,date,step,user_id) VALUE (?,?,?,?,?,?,?,?,?,?,?)',
-                                                    [course_id,quiz_id,quiz_titile,quiz_desc,credit,point,success,trueAnswers,date,step,user_id]);
-                let insertId = null;
+//                 resp.json({success: true, insertId});
+//             } else {
+//                 const set_quiz = await SQL.query('INSERT INTO user_quiz (course_id,quiz_id,quiz_titile,quiz_desc,credit,point,success,trueAnswers,date,step,user_id) VALUE (?,?,?,?,?,?,?,?,?,?,?)',
+//                                                     [course_id,quiz_id,quiz_titile,quiz_desc,credit,point,success,trueAnswers,date,step,user_id]);
+//                 let insertId = null;
 
-                var expireDate = new Date();
-                expireDate.setDate(expireDate.getDate() + 30);
+//                 var expireDate = new Date();
+//                 expireDate.setDate(expireDate.getDate() + 30);
 
-                if (step === 3 && !success) {
-                    await SQL.query(`
-                        INSERT INTO quiz_disable (course_id, user_id, date) VALUES (?,?,?)
-                    `, [course_id, user_id, expireDate]);
-                }
+//                 if (step === 3 && !success) {
+//                     await SQL.query(`
+//                         INSERT INTO quiz_disable (course_id, user_id, date) VALUES (?,?,?)
+//                     `, [course_id, user_id, expireDate]);
+//                 }
 
-                if (success) {
-                    await SQL.query(`
-                       DELETE FROM user_quiz WHERE course_id=? AND user_id=? AND success=?
-                    `, [course_id, user_id, 0]);
+//                 if (success) {
+//                     await SQL.query(`
+//                        DELETE FROM user_quiz WHERE course_id=? AND user_id=? AND success=?
+//                     `, [course_id, user_id, 0]);
 
-                    insertId = set_quiz[0].insertId;
-                }
+//                     insertId = set_quiz[0].insertId;
+//                 }
 
-                resp.json({success: true, insertId});
-            }
-        } catch(err) {
-            console.log(err)
-            resp.status(403).json({ msg: 'Something Was Wrong, Try Again'});
-        } 
-    })
-})
+//                 resp.json({success: true, insertId});
+//             }
+//         } catch(err) {
+//             console.log(err)
+//             resp.status(403).json({ msg: 'Something Was Wrong, Try Again'});
+//         } 
+//     })
+// })
 
 // rout.post('/update-quiz-result', authentication, async(req,resp)=>{
 //     jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRT, async(err)=>{

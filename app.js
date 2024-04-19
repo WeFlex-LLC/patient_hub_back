@@ -18,7 +18,7 @@ const api_payment = require('./api/modules/payment.js');
 
 const createMiddleware=require('./server/main.js');
 
-const CheckQuizes = require("./api/foo/check_quizes")
+// const CheckQuizes = require("./api/foo/check_quizes")
 
 // Usage
 app.use('/public', express.static(path.join(__dirname, 'admin')));
@@ -74,7 +74,7 @@ app.post('/admin/logout', (req, resp) => {
 });
 
 //Cron job for disabled quizes
-CheckQuizes.CheckQuizes();
+// CheckQuizes.CheckQuizes();
 
 const assets = {
     main: {

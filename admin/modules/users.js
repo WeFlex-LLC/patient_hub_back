@@ -9,8 +9,6 @@ const session = require('cookie-session');
 
 const SQL = require('../../config.js').pool;
 
-const healthcare_center = require("../foo/healthcare");
-
 const healthcare_proffesion = require("../foo/healthcare_proffesion");
 
 const Cryptr = require('cryptr');
@@ -35,12 +33,6 @@ rout.get('/', async (req, resp) => {
             
             const users = get_users[0];
 
-            for (let i = 0; i < users.length; i++) {
-                const get_credits = await SQL.query('SELECT SUM(credit) FROM user_quiz WHERE user_id=?', [users[i].id]);
-                
-                users[i].credits = get_credits[0][0]['SUM(credit)'];
-            }
-
             return resp.render('users.ejs', { users, search });
         } catch(err) {
             return;
@@ -53,7 +45,7 @@ rout.get('/', async (req, resp) => {
 rout.get('/export', async (req, resp) => {
     if (req.session.logged) {
         try {
-            const get_users = await SQL.query('SELECT id,fname,lname,email,phone,pasport_number,date_birthday,medical_institut,medical_profesional,last_login,is_deleted FROM user ORDER BY id DESC');
+            const get_users = await SQL.query('SELECT id,fname,lname,email,phone,date_birthday,medical_profesional,last_login,is_deleted FROM user ORDER BY id DESC');
         
             const users = get_users[0];
 
@@ -73,10 +65,6 @@ rout.get('/export', async (req, resp) => {
                 !failed_quizes[0][0] ? users[i]["failed_quizes"] = 0 : users[i]["failed_quizes"] = failed_quizes[0][0]["success"];
                 
                 !success_quizes[0][0] ? users[i]["success_quizes"] = 0 : users[i]["success_quizes"] = success_quizes[0][0]["success"];
-                
-                if (users[i].pasport_number && users[i].pasport_number.length > 20) {
-                    users[i].pasport_number = cryptr.decrypt(users[i].pasport_number)
-                }
 
                 users[i]["is_deleted"] ? users[i]["is_deleted"] = "Այո" : users[i]["is_deleted"] = "Ոչ";
                 
@@ -89,8 +77,6 @@ rout.get('/export', async (req, resp) => {
                 }
             }
 
-            let health = healthcare_center.healthcare_center;
-
             let profession = healthcare_proffesion.healthcare_proffesion;
 
             let workbook = new excel.Workbook();
@@ -99,12 +85,6 @@ rout.get('/export', async (req, resp) => {
             
             for (let i = 0; i < users.length; i++) {
                 delete users[i]["id"];
-
-                for (var j = 0; j < health.length; j++) {
-                    if (users[i]["medical_institut"] === health[j]["value"]) {
-                        users[i]["medical_institut"] = health[j]["label"];
-                    }
-                }
 
                 for (var x = 0; x < profession.length; x++) {
                     if (users[i]["medical_profesional"] === profession[x]["value"]) {
@@ -252,28 +232,28 @@ rout.get('/user-one/:id/payments', async(req, resp) => {
     }
 });
 
-rout.get('/user-one/:id/credits', async(req, resp) => {
-    if (req.session.logged) { 
-        try {
-            const { id } = req.params;
-            const get_user = await SQL.query('SELECT id,fname,lname FROM user WHERE id=?',[id]);
-            const users = get_user[0][0];
-            const get_user_quiz = await SQL.query('SELECT * FROM user_quiz WHERE user_id=? ORDER BY id DESC',[id]);
-            const list = get_user_quiz[0];
-            let credit = 0;
+// rout.get('/user-one/:id/credits', async(req, resp) => {
+//     if (req.session.logged) { 
+//         try {
+//             const { id } = req.params;
+//             const get_user = await SQL.query('SELECT id,fname,lname FROM user WHERE id=?',[id]);
+//             const users = get_user[0][0];
+//             const get_user_quiz = await SQL.query('SELECT * FROM user_quiz WHERE user_id=? ORDER BY id DESC',[id]);
+//             const list = get_user_quiz[0];
+//             let credit = 0;
 
-            for (let i = 0; i < list.length; i++) {
-                credit += parseFloat(list[i].credit);
-            }
+//             for (let i = 0; i < list.length; i++) {
+//                 credit += parseFloat(list[i].credit);
+//             }
 
-            return resp.render('user-one.ejs', { users, key: 'credits', list, credit });
-        } catch(err) {
-            return;
-        }
-    } else {
-        resp.render('login.ejs', {error:'Please Login'});
-    }
-});
+//             return resp.render('user-one.ejs', { users, key: 'credits', list, credit });
+//         } catch(err) {
+//             return;
+//         }
+//     } else {
+//         resp.render('login.ejs', {error:'Please Login'});
+//     }
+// });
 
 rout.get('/user-one/:id/certificate', async(req, resp) => {
     if (req.session.logged) {
