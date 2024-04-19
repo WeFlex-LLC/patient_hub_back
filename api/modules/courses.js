@@ -184,7 +184,7 @@ rout.post('/set-course-view', authorization, async (req, resp) => {
         
         const course = get_courses[0][0];
         
-        const new_view = parseInt(course.view)+1;
+        const new_view = parseInt(course.view ? course.view : 0) + 1;
         
         const set_view = await SQL.query('UPDATE courses SET view=? WHERE url=?',[new_view,url]);
         
