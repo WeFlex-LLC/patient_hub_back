@@ -15,6 +15,19 @@ const authorization = require('../../authorization.js').authorization;
 
 const authentication = require('../../authentication.js').authentication;
 
+
+
+function checkSubscription(date1, date2 = new Date()) {
+    const utcDate1 = new Date(Date.UTC(date1.getFullYear(), date1.getMonth(), 1));
+    const utcDate2 = new Date(Date.UTC(date2.getFullYear(), date2.getMonth(), 1));
+
+    const differenceMs = Math.abs(utcDate2 - utcDate1);
+
+    const oneMonthMs = 30 * 24 * 60 * 60 * 1000;
+
+    return differenceMs <= oneMonthMs;
+}
+
 rout.post('/get-all', authorization, async (req, resp) => {
     try {
         let get_all_courses = "";
@@ -415,7 +428,7 @@ rout.post('/get-one-signed', authentication, async(req, resp) => {
     // jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRT, async(err)=>{
     //     if(err)return resp.status(401).json({ message: 'Missing Authentication Header'});
         try {
-            const { url, medical_profesional } = req.body;
+            const { url, medical_profesional, user_id } = req.body;
             const get_all_courses = await SQL.query('SELECT * FROM courses WHERE url=?', [url]);
             const course = get_all_courses[0][0];
             course.price = course[`price_${medical_profesional}`];
@@ -461,17 +474,21 @@ rout.post('/get-one-signed', authentication, async(req, resp) => {
 
             course.watchAll = watchAll;
 
-            const checkOrder = await SQL.query('SELECT status FROM orders WHERE course_id=? AND user_id=?', [course.id, req.body.user_id]);
+            const [user] = await SQL.query('SELECT payment_date FROM user WHERE id=?', [user_id]);
+
+            course.isActive = user[0].payment_date && checkSubscription(user[0].payment_date);
+
+            // const checkOrder = await SQL.query('SELECT status FROM orders WHERE course_id=? AND user_id=?', [course.id, req.body.user_id]);
             
-            if (checkOrder[0].length) {
-                course.checkOrder = checkOrder[0][0];
-            } else {
-                course.checkOrder = false;
-            }
+            // if (checkOrder[0].length) {
+            //     course.isActive = true;
+            // } else {
+            //     course.checkOrder = false;
+            // }
 
             let checkIsUserPassedQuiz = await SQL.query(`
                 SELECT COUNT(id) as count FROM user_quiz WHERE course_id=? AND user_id=? AND success=1
-            `, [course.id, req.body.user_id]);
+            `, [course.id, user_id]);
 
             checkIsUserPassedQuiz = checkIsUserPassedQuiz[0][0].count;
 
@@ -479,7 +496,7 @@ rout.post('/get-one-signed', authentication, async(req, resp) => {
 
             let getStep = await SQL.query(`
                 SELECT step FROM user_quiz WHERE course_id=? AND user_id=?
-            `, [course.id, req.body.user_id]);
+            `, [course.id, user_id]);
 
             getStep = getStep[0]
 

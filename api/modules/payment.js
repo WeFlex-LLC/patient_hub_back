@@ -31,6 +31,8 @@ rout.get('/confirm/:course_id', authentication, async (req, resp) => {
         if (!res.data.ApprovalCode) return resp.redirect(`${process.env.WEBSITE_URI}/profile/courses/${courseURI}?status=false`);
 
         const order_update = await SQL.query('UPDATE orders SET status=? WHERE paymentID=?', [1, paymentID]);
+        const [orderRes] = await SQL.query('Select user_id from orders Where paymentID=?', [paymentID]);
+        await SQL.query('UPDATE user SET payment_date=? WHERE id=?', [new Date(), orderRes[0].user_id]);
 
         if (!order_update[0].affectedRows) return resp.redirect(`${process.env.WEBSITE_URI}/profile/courses/${courseURI}?status=false`);
 
