@@ -489,7 +489,7 @@ rout.post('/get-one-signed', authentication, async (req, resp) => {
 
         const [subscription] = await SQL.query('SELECT payment_date, type FROM subscription WHERE user_id=?', [user_id]);
 
-        course.isActive = subscription[0].payment_date && checkSubscription(subscription[0].type, subscription[0].payment_date);
+        course.isActive = subscription[0]?.payment_date && checkSubscription(subscription[0].type, subscription[0].payment_date);
 
         // const checkOrder = await SQL.query('SELECT status FROM orders WHERE course_id=? AND user_id=?', [course.id, req.body.user_id]);
 
