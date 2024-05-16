@@ -9,6 +9,8 @@ const SQL = require('../../config.js').pool;
 const authentication = require('../../authentication.js').authentication;
 
 const axios = require("axios");
+const { readFileSync } = require('fs');
+const { join } = require('path');
 
 rout.get('/confirm/:course_id', authentication, async (req, resp) => {
     try {        
@@ -32,7 +34,7 @@ rout.get('/confirm/:course_id', authentication, async (req, resp) => {
 
         const order_update = await SQL.query('UPDATE orders SET status=? WHERE paymentID=?', [1, paymentID]);
         const [orderRes] = await SQL.query('Select user_id from orders Where paymentID=?', [paymentID]);
-        await SQL.query('UPDATE user SET payment_date=? WHERE id=?', [new Date(), orderRes[0].user_id]);
+        await SQL.query('UPDATE subscription SET payment_date=? WHERE user_id=?', [new Date(), orderRes[0].user_id]);
 
         if (!order_update[0].affectedRows) return resp.redirect(`${process.env.WEBSITE_URI}/profile/courses/${courseURI}?status=false`);
 
@@ -46,10 +48,16 @@ rout.get('/confirm/:course_id', authentication, async (req, resp) => {
 rout.post('/make', authentication, async (req, resp) => {
     try {        
         // const payURI = `${process.env.AMERIA_BANK_URI}/VPOS/Payments/Pay`;
+
+        const optionsData = readFileSync(join(__dirname, '../../resources', 'options.json'), {
+            encoding: 'utf-8',
+        });
+        const options = JSON.parse(optionsData);
        
         await SQL.query(`DELETE FROM orders WHERE user_id=? AND course_id=? AND status=?`, [req.body.user_id, req.body.course_id, 0]);
 
-        let add_course = await SQL.query(`INSERT INTO orders (paymentID, user_id, course_id, money) VALUES (?,?,?,?)`, ["", req.body.user_id, req.body.course_id, req.body.price]);
+        let add_course = await SQL.query(`INSERT INTO orders (paymentID, user_id, course_id, money) VALUES (?,?,?,?)`, ["", req.body.user_id, req.body.course_id, options[req.body.type]]);
+        await SQL.query(`INSERT INTO subscription (user_id, type) VALUES (?,?)`, [req.body.user_id, options[req.body.type]]);
         
         add_course = add_course[0];
     
@@ -57,7 +65,7 @@ rout.post('/make', authentication, async (req, resp) => {
 
         var json = {
             "ClientID": process.env.AMERIA_BANK_CLIENT_ID,
-            "Amount": req.body.price,
+            "Amount": options[req.body.type],
             "OrderID": process.env.IS_DEV === "true" ? 2512109 : add_course.insertId,
             "Username": process.env.AMERIA_BANK_Username,
             "Password": process.env.AMERIA_BANK_Password,
@@ -69,7 +77,7 @@ rout.post('/make', authentication, async (req, resp) => {
         console.log("req",res);
         if (res.data.ResponseMessage !== "OK") return resp.json({success: false});
 
-        await SQL.query(`UPDATE orders SET paymentID=?, money=? WHERE user_id=? AND course_id=?`, [res.data.PaymentID, req.body.price, req.body.user_id, req.body.course_id]);
+        await SQL.query(`UPDATE orders SET paymentID=?, money=? WHERE user_id=? AND course_id=?`, [res.data.PaymentID, options[req.body.type], req.body.user_id, req.body.course_id]);
 
         resp.json({success: true, url: `${process.env.AMERIA_BANK_URI}/VPOS/Payments/Pay?id=${res.data.PaymentID}&lang=am`});
     } catch (err) {
@@ -87,15 +95,16 @@ rout.post("/payPromocode" ,authentication,async (req,resp)=>{
             
                await SQL.query(`DELETE FROM orders WHERE user_id=? AND course_id=? AND status=?`, [req.body.user_id, req.body.course_id, 0]);
         
-                let add_course = await SQL.query(`INSERT INTO orders (paymentID, user_id, course_id, money) VALUES (?,?,?,?)`, ["", req.body.user_id, req.body.course_id, req.body.price]);
-                
+                let add_course = await SQL.query(`INSERT INTO orders (paymentID, user_id, course_id, money) VALUES (?,?,?,?)`, ["", req.body.user_id, req.body.course_id, options[req.body.type]]);
+                await SQL.query(`INSERT INTO subscription (user_id, type) VALUES (?,?)`, [req.body.user_id, options[req.body.type]]);
+
                 add_course = add_course[0];
             
                 if (!add_course.affectedRows) return resp.json({success: false});
         
                 var json = {
                     "ClientID": process.env.AMERIA_BANK_CLIENT_ID,
-                    "Amount": req.body.price,
+                    "Amount": options[req.body.type],
                     "OrderID": process.env.IS_DEV === "true" ? 251180 : add_course.insertId,
                     "Username": process.env.AMERIA_BANK_Username,
                     "Password": process.env.AMERIA_BANK_Password,
@@ -107,7 +116,7 @@ rout.post("/payPromocode" ,authentication,async (req,resp)=>{
                
                 if (res.data.ResponseMessage !== "OK") return resp.json({success: false});
         
-                await SQL.query(`UPDATE orders SET paymentID=?, money=? WHERE user_id=? AND course_id=?`, [res.data.PaymentID, req.body.price, req.body.user_id, req.body.course_id]);
+                await SQL.query(`UPDATE orders SET paymentID=?, money=? WHERE user_id=? AND course_id=?`, [res.data.PaymentID, options[req.body.type], req.body.user_id, req.body.course_id]);
         
                 resp.json({success: true, url: `${process.env.AMERIA_BANK_URI}/VPOS/Payments/Pay?id=${res.data.PaymentID}&lang=am`});
             } catch (err) {
@@ -117,9 +126,9 @@ rout.post("/payPromocode" ,authentication,async (req,resp)=>{
         }else if(req.body.promo_code==promocodeProduct[0][0].promo_code){
             var NewPrice = "0";
            if(promocodeProduct[0][0].sale){
-                NewPrice = +req.body.price-((+req.body.price/100)*(+promocodeProduct[0][0].sale));
+                NewPrice = +options[req.body.type]-((+options[req.body.type]/100)*(+promocodeProduct[0][0].sale));
            }else if(promocodeProduct[0][0].special_price){
-                NewPrice =+req.body.price-(+promocodeProduct[0][0].special_price);
+                NewPrice =+options[req.body.type]-(+promocodeProduct[0][0].special_price);
            }
 
            if(NewPrice>0){
@@ -128,7 +137,7 @@ rout.post("/payPromocode" ,authentication,async (req,resp)=>{
             
                 await SQL.query(`DELETE FROM orders WHERE user_id=? AND course_id=? AND status=?`, [req.body.user_id, req.body.course_id, 0]);
          
-                 let add_course = await SQL.query(`INSERT INTO orders (paymentID, user_id, course_id, money) VALUES (?,?,?,?)`, ["", req.body.user_id, req.body.course_id, req.body.price]);
+                 let add_course = await SQL.query(`INSERT INTO orders (paymentID, user_id, course_id, money) VALUES (?,?,?,?)`, ["", req.body.user_id, req.body.course_id, options[req.body.type]]);
                  
                  add_course = add_course[0];
              
@@ -149,7 +158,7 @@ rout.post("/payPromocode" ,authentication,async (req,resp)=>{
                 
                  if (res.data.ResponseMessage !== "OK") return resp.json({success: false});
          
-                 await SQL.query(`UPDATE orders SET paymentID=?, money=? WHERE user_id=? AND course_id=?`, [res.data.PaymentID, req.body.price, req.body.user_id, req.body.course_id]);
+                 await SQL.query(`UPDATE orders SET paymentID=?, money=? WHERE user_id=? AND course_id=?`, [res.data.PaymentID, options[req.body.type], req.body.user_id, req.body.course_id]);
          
                  resp.json({success: true, url: `${process.env.AMERIA_BANK_URI}/VPOS/Payments/Pay?id=${res.data.PaymentID}&lang=am`});
              } catch (err) {
