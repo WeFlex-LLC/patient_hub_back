@@ -57,7 +57,7 @@ rout.post('/make', authentication, async (req, resp) => {
         await SQL.query(`DELETE FROM orders WHERE user_id=? AND course_id=? AND status=?`, [req.body.user_id, req.body.course_id, 0]);
 
         let add_course = await SQL.query(`INSERT INTO orders (paymentID, user_id, course_id, money) VALUES (?,?,?,?)`, ["", req.body.user_id, req.body.course_id, options[req.body.type]]);
-        await SQL.query(`INSERT INTO subscription (user_id, type) VALUES (?,?)`, [req.body.user_id, req.body.type]);
+        await SQL.query(`INSERT INTO subscription (user_id, type) VALUES (?,?) ON DUPLICATE KEY UPDATE type = ?`, [req.body.user_id, req.body.type, req.body.type]);
         
         add_course = add_course[0];
     
