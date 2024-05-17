@@ -450,6 +450,10 @@ rout.post('/get-one-signed', authentication, async (req, resp) => {
         delete course.price_parents;
         delete course.price_future_parents;
 
+        const [subscription] = await SQL.query('SELECT payment_date, type FROM subscription WHERE user_id=?', [user_id]);
+
+        course.isActive = subscription[0]?.payment_date && checkSubscription(subscription[0].type, subscription[0].payment_date);
+
         const autorId = course.f_profesor;
         const get_autor = await SQL.query('SELECT title FROM cours_profs WHERE id=?', [autorId]);
         course.autor = get_autor[0][0].title;
@@ -466,6 +470,9 @@ rout.post('/get-one-signed', authentication, async (req, resp) => {
         const watch_list = get_watch_list[0];
 
         for (let i = 0; i < course.courses_videos.length; i++) {
+            if(!course.isActive)
+                delete course.courses_videos[i].vimeo;
+
             course.courses_videos[i].watched = false;
 
             for (let j = 0; j < watch_list.length; j++) {
@@ -486,10 +493,6 @@ rout.post('/get-one-signed', authentication, async (req, resp) => {
         }
 
         course.watchAll = watchAll;
-
-        const [subscription] = await SQL.query('SELECT payment_date, type FROM subscription WHERE user_id=?', [user_id]);
-
-        course.isActive = subscription[0]?.payment_date && checkSubscription(subscription[0].type, subscription[0].payment_date);
 
         // const checkOrder = await SQL.query('SELECT status FROM orders WHERE course_id=? AND user_id=?', [course.id, req.body.user_id]);
 
