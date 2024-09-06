@@ -152,7 +152,7 @@ const EmailVerifySignIn = (HOST, email, token) => {
           <tr>
             <td style="width:640px;">
               
-            <img height="auto" src="https://patienthub.am/admin/uploads/email_logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;max-width: 200px;font-size:13px;" width="640">
+            <img height="auto" src="https://patienthub.am/admin/uploads/email_logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;max-width: 200px;font-size:13px;" width="500">
     
             </td>
           </tr>
@@ -383,7 +383,7 @@ const EmailVerify = (HOST, email, token) => {
       <tbody>
         <tr>
           <td style="width:640px;">
-            <img height="auto" src="https://patienthub.am/admin/uploads/email_logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;max-width: 200px;font-size:13px;" width="640">
+            <img height="auto" src="https://patienthub.am/admin/uploads/email_logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;max-width: 200px;font-size:13px;" width="500">
           </td>
         </tr>
       </tbody>
@@ -615,7 +615,7 @@ const EmailVerifyRecover = (HOST, email, token) => {
         <tr>
           <td style="width:640px;">
             
-    <img height="auto" src="https://patienthub.am/admin/uploads/email_logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;max-width: 200px;font-size:13px;" width="640">
+    <img height="auto" src="https://patienthub.am/admin/uploads/email_logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;max-width: 200px;font-size:13px;" width="500">
   
           </td>
         </tr>
@@ -848,7 +848,7 @@ const EmailCertificate = () => {
         <tr>
           <td style="width:640px;">
             
-    <img height="auto" src="https://patienthub.am/admin/uploads/email_logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;max-width: 200px;font-size:13px;" width="640">
+    <img height="auto" src="https://patienthub.am/admin/uploads/email_logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;max-width: 200px;font-size:13px;" width="500">
 
           </td>
         </tr>

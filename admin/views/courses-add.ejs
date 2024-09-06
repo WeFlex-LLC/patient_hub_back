@@ -59,8 +59,7 @@
                 </select>
               </div>
               <div class="input-group">
-                <label class="w-100" >Author</label>
-                <select class="usual-input" name="f_profesor" disabled required>
+                <select class="usual-input" name="f_profesor" disabled hidden>
                   <option value="" disabled selected>Choose Author</option>
                   <% profs.forEach(function(filter){%>
                     <option value="<%=filter.id%>" label="<%=filter.category_id%>"><%=filter.title%></option>

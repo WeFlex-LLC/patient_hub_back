@@ -91,9 +91,7 @@
                 </div>
                 
                 <div class="input-group">
-                  <label class="w-100">Author</label>
-
-                  <select class="usual-input" name="f_profesor">
+                  <select class="usual-input" name="f_profesor" hidden>
                     <% profs.forEach(function(filter){%>
                       <option 
                          
@@ -318,7 +316,7 @@
                   <div class="d-flex align-items-center">
                     <% if(status !== 3){ %>
                       <input type="checkbox" name="public" id="public" <%if(course.public==1){%>checked<%}%> hidden/>
-                      <label for="public" onclick="publicFunc('<%= course.public %>', '<%= course.id %>')">Publish</label>
+                      <label for="public" onclick="publicFunc('<%= course.public %>', '<%= course.id %>')"><%= course.public ? 'Unpublish' : 'Publish' %></label>
                       <button type="submit">Update</button>
                     <% } else{ %>
                       <input type="checkbox" name="public" id="public" <%if(course.public==1){%>checked<%}%> hidden/>
@@ -375,12 +373,12 @@
                       </div>
                     </div>
                     <div class="input-group ml-4">
-                        <label>Title</label>
-                        <input type="text" class="usual-input" id="titleV" name="title" required>
+<!--                        <label>Title</label>-->
+                        <input type="text" class="usual-input" id="titleV" name="title" value="<%=course.title%>" hidden>
                     </div>
                     <div class="input-group  ml-4">
-                        <label>URL</label>
-                        <input type="text"  class="usual-input" id="urlV" name="url" required>
+<!--                        <label>URL</label>-->
+                        <input type="text"  class="usual-input" id="urlV" name="url" value="" hidden>
                     </div>
                   </div>
                   <div class="file_text_group">
@@ -396,8 +394,8 @@
                       <input type="text" class="usual-input" name="vimeo">
                     </div>
                     <div class="input-group  ml-4">
-                      <label>Part</label>
-                      <input type="text" class="usual-input" name="part" required>
+<!--                      <label>Part</label>-->
+                      <input type="text" class="usual-input" name="part" value="" hidden="">
                     </div>
                   </div>
                   <div class="form_footer">
